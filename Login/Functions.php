@@ -22,4 +22,24 @@
 		}
 		return false;
 	}
+	
+	function get_user()
+	{
+		//Ensures that the user exists
+		if(isset($_POST['email']) && isset($_POST['password'])
+		{
+			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em, password = :pa");
+			$stmt->execute(array(
+			    ":em" => $_POST['email'],
+				":pa" => $_POST['password']
+			));
+			
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if(!empty($result))
+			{
+				return $result;
+			}
+		}
+		return false;
+	}
 ?>
