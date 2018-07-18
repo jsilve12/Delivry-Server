@@ -1,0 +1,215 @@
+CREATE TABLE People(
+	people_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	name VARCHAR(255),
+	email VARCHAR(255),
+	salt VARCHAR(255),
+	password VARCHAR(255),
+	address VARCHAR(255),
+	longitude DOUBLE,
+	latitude DOUBLE,
+	rating DOUBLE,
+	UNIQUE(name, email, password)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Stores(
+	store_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	name VARCHAR(255),
+	num_called INTEGER,
+	UNIQUE(name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Items(
+	item_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	name VARCHAR(255),
+	description VARCHAR(255),
+	num_called INTEGER,
+	UNIQUE(name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Locations(
+	location_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	store_id INTEGER,
+	longitude DOUBLE,
+	latitude DOUBLE,
+	address VARCHAR(255)
+	UNIQUE(address)
+	CONSTRAINT locations_ibfk_1
+		FOREIGN KEY(store_id)
+		REFERENCES Stores(store_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE stores_item(
+	store_id INTEGER,
+	item_id INTEGER,
+	count INTEGER,
+	CONSTRAINT stores_item_ibfk_1
+		FOREIGN KEY(store_id)
+		REFERENCES Stores (store_id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAIN stores_item_ibfk_2
+		FOREIGN KEY(item_id)
+		REFERENCES Items (item_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Reviews(
+	review_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	reviewer_id INTEGER,
+	reviewee_id INTEGER,
+	rating INTEGER,
+	comment VARCHAR(255),
+	CONSTRAINT reviews_ibfk_1
+		FOREIGN KEY (reviewer_id)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT reviews_ibfk_2
+		FOREIGN KEY (reviewee_id)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Order_Placed(
+	order_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	placed_by INTEGER,
+	address VARCHAR(255),
+	addr_description VARCHAR(255),
+	longitude DOUBLE,
+	latitude DOUBLE,
+	store INTEGER,
+	CONSTRAINT order_placed_ibfk_1
+		FOREIGN KEY (placed_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_placed_ibfk_3
+		FOREIGN KEY (store)
+		REFERENCES Stores (store_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+CREATE TABLE Items_Placed(
+	order_id INTEGER,
+	item_id INTEGER,
+	CONSTRAINT items_placed_ibfk_1
+		FOREIGN KEY (order_id)
+		REFERENCES Order_Placed(order_id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT items_placed_ibfk_2
+		FOREIGN KEY (item_id)
+		REFERENCES Items (item_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Order_Accepted(
+	order_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	placed_by INTEGER,
+	accepted_by INTEGER,
+	address VARCHAR(255),
+	addr_description VARCHAR(255),
+	longitude DOUBLE,
+	latitude DOUBLE,
+	store INTEGER,
+	CONSTRAINT order_accepted_ibfk_1
+		FOREIGN KEY (placed_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_accepted_ibfk_2
+		FOREIGN KEY (accepted_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_accepted_ibfk_3
+		FOREIGN KEY (store)
+		REFERENCES Stores (store_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+CREATE TABLE Items_Accepted(
+	order_id INTEGER,
+	item_id INTEGER,
+	CONSTRAINT items_accepted_ibfk_1
+		FOREIGN KEY (order_id)
+		REFERENCES Order_Accepted(order_id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT items_accepted_ibfk_2
+		FOREIGN KEY (item_id)
+		REFERENCES Items (item_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Order_Finished(
+	order_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	placed_by INTEGER,
+	accepted_by INTEGER,
+	receipt VARCHAR(255),
+	price INTEGER,
+	address VARCHAR(255),
+	addr_description VARCHAR(255),
+	longitude DOUBLE,
+	latitude DOUBLE,
+	store INTEGER,
+	CONSTRAINT order_finished_ibfk_1
+		FOREIGN KEY (placed_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_finished_ibfk_2
+		FOREIGN KEY (accepted_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_finished_ibfk_3
+		FOREIGN KEY (store)
+		REFERENCES Stores (store_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+CREATE TABLE Items_Finished(
+	order_id INTEGER,
+	item_id INTEGER,
+	CONSTRAINT items_finished_ibfk_1
+		FOREIGN KEY (order_id)
+		REFERENCES Order_Finished(order_id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT items_finished_ibfk_2
+		FOREIGN KEY (item_id)
+		REFERENCES Items (item_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Order_Conflict(
+	order_id INTEGER NOT NULL KEY AUTO_INCREMENT,
+	placed_by INTEGER,
+	accepted_by INTEGER,
+	receipt VARCHAR(255),
+	price INTEGER,
+	address VARCHAR(255),
+	addr_description VARCHAR(255),
+	longitude DOUBLE,
+	latitude DOUBLE,
+	store INTEGER,
+	comments VARCHAR(1023),
+	CONSTRAINT order_conflict_ibfk_1
+		FOREIGN KEY (placed_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_conflict_ibfk_2
+		FOREIGN KEY (accepted_by)
+		REFERENCES People (people_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT order_conflict_ibfk_3
+		FOREIGN KEY (store)
+		REFERENCES Stores (store_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+CREATE TABLE Items_Conflict(
+	order_id INTEGER,
+	item_id INTEGER,
+	CONSTRAINT items_finished_ibfk_1
+		FOREIGN KEY (order_id)
+		REFERENCES Order_Conflict(order_id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT items_finished_ibfk_2
+		FOREIGN KEY (item_id)
+		REFERENCES Items (item_id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

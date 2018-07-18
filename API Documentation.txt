@@ -1,0 +1,13 @@
+Introduction	
+	This API Documentation will be laid out in the following way. The Base level of indentation will be the
+	new folders. The second level will be the specific pages, and the third level will be specific notes on
+	the pages, including what information needs to be sent, the filepath and what is returned. Unless 		otherwise specified information will be sent by Post request and returned on a JSON only page.
+Login
+	Create.php
+		Method: Post
+		Entries: name, email, salt, password
+		Does: Creates an Account
+		Errors: A field is missing, Email needs to have an @, Unknown error with submitting
+		TODO: Send a confirmation email
+	
+
