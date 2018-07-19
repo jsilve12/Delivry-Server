@@ -1,6 +1,60 @@
 <?php
-	class store
+	class locat
 	{
+		var $name;
+		var $addr;
+		var $descript;
+		var $long;
+		var $lat;
 		
+		function __construct0($d)
+		{
+			$this->name = $d;
+		}
+		function __construct($a, $b, $c, $d, $e)
+		{
+			$this->addr = $a;
+			$this->long = $b;
+			$this->lat = $c;
+			$this->name = $d;
+			$this->descript = $e;
+		}
+	}
+	class item
+	{
+		var $name;
+		var $description;
+		
+		function __construct0($a, $b)
+		{
+			$this->name=$a;
+			$this->description=$b;
+		}
+	}
+	class order
+	{
+		var $placed_by;
+		var $accepted_by;
+		var $store;
+		var $destination;
+		var $items = array();
+		
+		function __construct($a, $b, $c, $d);
+		{
+			$this->placed_by = $a;
+			$this->store = $b;
+			$this->destination = $c;
+			$this->items = $d;
+		}
+		function __construct1($a, $b, $c);
+		{
+			$this->placed_by = $a;
+			$this->store = $b;
+			$this->destination = $c;
+		}
+		function add_item($item)
+		{
+			this->items[] = $item;
+		}
 	}
 ?>
