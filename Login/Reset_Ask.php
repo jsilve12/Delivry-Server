@@ -3,11 +3,7 @@
 	$response = array();
 	
 	//Verifies that its a real user
-	$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em");
-	$stmt->execute(array(
-		":em" => $_POST['email']
-	));
-	$result = $stmt->fetchAll(PDO::FETCH_ASSOC)
+	$result = $get_user_email();
 	if(empty($result))
 	{
 		$response['error'] = "User not found";
@@ -22,4 +18,7 @@
 		":tp" => $temp_pass
 	));
 	//TODO: Send an email to the person with the temp password
+	
+	$response['success'] = "Sent a reset email";
+	done();
 ?>
