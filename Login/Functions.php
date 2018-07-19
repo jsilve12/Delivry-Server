@@ -42,4 +42,14 @@
 		}
 		return false;
 	}
+	
+	function get_user_email()
+	{
+		$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em");
+		$stmt->execute(array(
+			":em" => $_POST['email']
+		));
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $result;
+	}
 ?>
