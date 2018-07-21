@@ -6,7 +6,7 @@
 		var $descript;
 		var $long;
 		var $lat;
-		
+
 		function __construct0($d)
 		{
 			$this->name = $d;
@@ -24,7 +24,7 @@
 	{
 		var $name;
 		var $description;
-		
+
 		function __construct0($a, $b)
 		{
 			$this->name=$a;
@@ -38,7 +38,7 @@
 		var $store;
 		var $destination;
 		var $items = array();
-		
+
 		function __construct($a, $b, $c, $d);
 		{
 			$this->placed_by = $a;
@@ -57,7 +57,7 @@
 			this->items[] = $item;
 		}
 	}
-	
+
 	function done()
 	{
 		echo json_encode($response);
@@ -73,21 +73,13 @@
 			    ":em" => $_POST['email'],
 				":pa" => $_POST['password']
 			));
-			
+
 			if(!empty($stmt->fetchAll(PDO::FETCH_ASSOC)))
 			{
 				return true;
 			}
 		}
 		return false;
-	}
-	function start()
-	{
-		if(!verify_user())
-		{
-			response['error'] = "User not found";
-			done();
-		}
 	}
 	function get_user()
 	{
@@ -99,7 +91,7 @@
 			    ":em" => $_POST['email'],
 				":pa" => $_POST['password']
 			));
-			
+
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			if(!empty($result))
 			{
@@ -108,14 +100,23 @@
 		}
 		return false;
 	}
+	function start()
+	{
+		if(!verify_user())
+		{
+			response['error'] = "User not found";
+			done();
+		}
+		return get_user();
+	}
 	//Don't forget to implement
 	function email($content, $recipient)
 	{
-		
+
 	}
-	
+
 	function degrees2miles($lat, $long, $diff)
 	{
-		
+
 	}
 ?>
