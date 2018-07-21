@@ -32,6 +32,8 @@
 
 	//Enters the order into the new database
 	try {
+
+		//Enters the order into the accepted database
 		$stmt = $pdo->prepare("INSERT INTO Order_Accepted(placed_by, accepted_by, address, addr_description, longitude, latitude, store) VALUES(:pb, :ab, :addr, :ad_de, :lo, :la, :st)");
 		$stmt->execute(array(
 			":pb" => $result[0]["placed_by"],
@@ -44,15 +46,31 @@
 		));
 		$ID = $pdo->LastInsertId();
 
+		//Deletes the object in the items placed database
+		$stmt = $pdo->prepare("DELETE FROM Order_Placed WHERE order_id = :oi");
+		$stmt->execute(array(
+			":oi" => $_POST['order_id'];
+		))
+
 		//Adds the items to the order
 		foreach($result as $value)
 		{
-			if($value["order_id"] != $ID) continue;
+			//Ensures it corresponds to the correct order
+			if($value["order_id"] != $_POST['order_id']) continue;
+
+			//Enters it into the Items Accepted database
 			$stmt = $pdo->prepare("INSERT INTO Items_Accepted(order_id, description, item_id) VALUES(:oi, :de, :ii)");
 			$stmt->execute(array(
 				":oi" => $ID,
 				":de" => $value['description'],
 				":ii" => $value['item_id']
+			));
+
+			//Deletes the old entries
+			$stmt = $pdo->prepare("DELETE FROM Items_Placed WHERE item_id = :ii, order_id = oi ");
+			$stmt->execute(array(
+				":ii" =>$value['item_id'],
+				":oi" =>$_POST['order_id']
 			));
 		}
 
