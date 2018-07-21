@@ -81,6 +81,14 @@
 		}
 		return false;
 	}
+	function start()
+	{
+		if(!verify_user())
+		{
+			response['error'] = "User not found";
+			done();
+		}
+	}
 	function get_user()
 	{
 		//Ensures that the user exists
@@ -99,5 +107,15 @@
 			}
 		}
 		return false;
+	}
+	//Don't forget to implement
+	function email($content, $recipient)
+	{
+		
+	}
+	
+	function degrees2miles($lat, $long, $diff)
+	{
+		
 	}
 ?>
