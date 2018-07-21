@@ -23,6 +23,6 @@
   $stmt->execute(array(
     ":oi" => $_POST['order_id']
   ));
-  $response['succes'] = "Order Canceled";
+  $response['success'] = "Order Canceled";
   done();
 ?>
