@@ -67,7 +67,7 @@
 			));
 
 			//Deletes the old entries
-			$stmt = $pdo->prepare("DELETE FROM Items_Placed WHERE item_id = :ii, order_id = oi ");
+			$stmt = $pdo->prepare("DELETE FROM Items_Placed WHERE item_id = :ii AND order_id = oi ");
 			$stmt->execute(array(
 				":ii" =>$value['item_id'],
 				":oi" =>$_POST['order_id']

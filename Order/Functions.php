@@ -68,7 +68,7 @@
 		//Ensures that the user exists
 		if(isset($_POST['email']) && isset($_POST['password'])
 		{
-			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em, password = :pa");
+			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em AND password = :pa");
 			$stmt->execute(array(
 			    ":em" => $_POST['email'],
 				":pa" => $_POST['password']
@@ -86,7 +86,7 @@
 		//Ensures that the user exists
 		if(isset($_POST['email']) && isset($_POST['password'])
 		{
-			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em, password = :pa");
+			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em AND password = :pa");
 			$stmt->execute(array(
 			    ":em" => $_POST['email'],
 				":pa" => $_POST['password']

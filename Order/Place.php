@@ -84,7 +84,7 @@
 			}
 
 			//Deals with the table that tracks how many times an item is purchased at a store
-			$stmt = $pdo->prepare("SELECT * FROM stores_item WHERE store_id = ".$store_id." item_id = ".$item_id);
+			$stmt = $pdo->prepare("SELECT * FROM stores_item WHERE store_id = ".$store_id." AND item_id = ".$item_id);
 			$stmt->execute();
 			$result2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -100,7 +100,7 @@
 			//Otherwise the row is updated
 			else
 			{
-				$stmt = $pdo->prepare("UPDATE stores_item SET count ".++$result[0]['count']." WHERE store_id = ".$store_id." item_id = ".$item_id);
+				$stmt = $pdo->prepare("UPDATE stores_item SET count ".++$result[0]['count']." WHERE store_id = ".$store_id." AND item_id = ".$item_id);
 				$stmt->execute();
 			}
 
