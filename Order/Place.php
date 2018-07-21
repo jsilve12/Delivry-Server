@@ -25,7 +25,7 @@
 		$result = $stmt->FetchAll(PDO::FETCH_ASSOC);
 
 		$store_id;
-		//Adds the store if it doesn't exis
+		//Adds the store if it doesn't exist
 		if(empty($result))
 		{
 			$stmt = $pdo->prepare("INSERT INTO Stores(name, num_called) VALUES(:na, 1)");

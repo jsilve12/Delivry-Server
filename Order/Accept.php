@@ -24,7 +24,7 @@
 		$respone['error'] = "Order not found in database";
 		done();
 	}
-	if(!empty($result))
+	if(empty($result))
 	{
 		$response['error'] = "Result set from database is empty";
 		done();
