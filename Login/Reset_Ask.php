@@ -1,7 +1,7 @@
 <?php
-	require_once("Functions.php");
+	require_once("../Order/Functions.php");
 	$response = array();
-	
+
 	//Verifies that its a real user
 	$result = $get_user_email();
 	if(empty($result))
@@ -17,7 +17,7 @@
 		":tp" => $temp_pass
 	));
 	//TODO: Send an email to the person with the temp password
-	
+
 	$response['success'] = "Sent a reset email";
 	done();
 	}

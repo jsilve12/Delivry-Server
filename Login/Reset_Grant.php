@@ -1,6 +1,6 @@
 <?php
-	require_once("Functions.php");
-	
+	require_once("../Order/Functions.php");
+
 	//Gets and verifies the user
 	$result = get_user_email();
 	if(empty($result))

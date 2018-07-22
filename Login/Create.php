@@ -1,5 +1,5 @@
 <?php
-	require_once("pdo.php");
+	require_once("../Order/Functions.php");
 	$respone = array();
 	//Makes sure that all the enteries are entered to create the new account
 	if(!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['salt']) || !isset($_POST['password']) || strlen($_POST['name']) < 1 || strlen($_POST['email']) < 1 || strlen($_POST['salt']) < 1 || strlen($_POST['password']) < 1)
@@ -12,7 +12,7 @@
 	{
 		$response['error'] = "Email needs to contain an @ sign";
 	}
-	
+
 	//Inserts into the database
 	try
 	{

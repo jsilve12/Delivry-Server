@@ -1,5 +1,5 @@
 <?php
-	require_once("Functions.php");
+	require_once("../Order/Functions.php");
 	$user = get_user();
 	if(empty($user))
 	{
@@ -84,25 +84,13 @@
 			}
 
 			//Deals with the table that tracks how many times an item is purchased at a store
-			$stmt = $pdo->prepare("SELECT * FROM stores_item WHERE store_id = ".$store_id." AND item_id = ".$item_id);
-			$stmt->execute();
-			$result2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 			//Adds a Row if the combination doesn't exist
-			if(empty($result2))
-			{
-				$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, count) VALUES(:si , :ii ,1)");
+				$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, DT) VALUES(:si , :ii , ".date("Y-m-d H:i:s").")");
 				$stmt->execute(array(
 					":si" => $store_id,
 					":ii" => $item_id
 				));
-			}
 			//Otherwise the row is updated
-			else
-			{
-				$stmt = $pdo->prepare("UPDATE stores_item SET count ".++$result[0]['count']." WHERE store_id = ".$store_id." AND item_id = ".$item_id);
-				$stmt->execute();
-			}
 
 			//Connects the item to the order
 			$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(".$order_id", :desc, ".$item_id.")");

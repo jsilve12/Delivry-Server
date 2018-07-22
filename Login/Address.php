@@ -1,6 +1,6 @@
 <?php
-	require_once("Functions.php");
-	
+	require_once("../Order/Functions.php");
+
 	//Makes sure the user actually exists
 	$result = array();
 	if(!verify_user())
