@@ -18,30 +18,38 @@
 
 	else
 	{
-		$stmt = $pdo->prepare("SELECT salt, email, password FROM People WHERE email = :em");
-		$stmt->execute(array(
-			":em" => $_POST['email']
-		));
-		$result = $stmt->fetchAll(PDO::FETCH_ASSOC)
+		try {
+			$stmt = $pdo->prepare("SELECT salt, email, password FROM People WHERE email = :em");
+			$stmt->execute(array(
+				":em" => $_POST['email']
+			));
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC)
 
-		//Processes the login based on whether there is an associated user
-		if(empty($result))
-		{
-			$response['error'] = "There is no user associated with that email account";
-			done();
-		}
-		//Sees if the passwords match
-		$entered = hash("md5", $result[0]['salt'].$_POST['password']);
+			//Processes the login based on whether there is an associated user
+			if(empty($result))
+			{
+				$response['error'] = "There is no user associated with that email account";
+				done();
+			}
+			//Sees if the passwords match
+			$entered = hash("md5", $result[0]['salt'].$_POST['password']);
 
-		if($entered == $result['password'])
-		{
-			$response['user'] = $_POST['email'];
-			$response['pass'] = $result['password'];
-			done();
-		}
-		else
-		{
-			$response['error'] = "Incorrect Password";
+			if($entered == $result['password'])
+			{
+				$user = array(
+					'user' => $_POST['email'],
+					'pass' => $result['password']
+				);
+				$response['success'] = $user;
+				done();
+			}
+			else
+			{
+				$response['error'] = "Incorrect Password";
+				done();
+			}
+		} catch (\Exception $e) {
+			$response['error'] = "SQL error";
 			done();
 		}
 	}

@@ -3,11 +3,8 @@
 
 	//Makes sure the user actually exists
 	$result = array();
-	if(!verify_user())
-	{
-		$result['error'] = "User doesn't exist";
-		done();
-	}
+	start();
+	
 		//Adds the address to the users SQL entry
 		try(
 		{

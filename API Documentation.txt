@@ -1,13 +1,48 @@
 Introduction	
-	This API Documentation will be laid out in the following way. The Base level of indentation will be the
-	new folders. The second level will be the specific pages, and the third level will be specific notes on
-	the pages, including what information needs to be sent, the filepath and what is returned. Unless 		otherwise specified information will be sent by Post request and returned on a JSON only page.
+	This API Documentation will be laid out in the following way. The Base level of indentation will be the new folders. The second level will be the specific pages, and the third level will be specific notes on the pages, including what information needs to be sent, the filepath and what is returned. Unless otherwise specified information will be sent by Post request and returned on a JSON only page. The array sending the information will be named 'response'. All errors are sent to response['error'], and successful results are sent to response['success'].
+	To use the server for testing a bogus website will be created, and you'll have to use that website name followed by the filepath. For instance if you want to get the file in order to accept orders and the website url is abcde.com, you'd use abcde.com/Order/Accept.php . I recommend having a variable to use as a placeholder for the website url, and then specifying the rest of the path normally.
+	All Web pages, except for Login/Create.php require you to include the email and password (Which must be salted and hashed except on the Login page, where it can be plain text). If you don't, you'll get an error ("User not found"). I'll list that under required, but not under error.
+
+Autocomplete
+	Item.php
+		Requires: email, password (Must be salted and hashed), item (partial or full item name), num_results (number of suggestions wanted)
+		Returns: Suggestions based off of the item name given for what the item could be.
+		Errors: "Error retrieving information from the database"
+
+	Store.php
+		Requires: email, password (Must be salted and hashed), name (partial or full store name), num_results (number of results wanted)
+		Returns: Autofill results for store based on the current input
+		Errors: "SQL Error"
+
 Login
-	Create.php
-		Method: Post
-		Entries: name, email, salt, password
-		Does: Creates an Account
-		Errors: A field is missing, Email needs to have an @, Unknown error with submitting
-		TODO: Send a confirmation email
+	Address.php
+		Requires: email, password (Must be salted and hashed), address (address the user normally wants used), longitude, latitude
+		Returns: a message the says "Success"
+		Effects: Enters the address into the database
+		Errors: "SQL entered improperly"
 	
+	Create.php
+		Requires: name, email, salt (Random string you must generate), password
+		Returns: a message that says "Account created"
+		Effects: Creates account in the database, and sends an email to the given email, saying the account was created.
+		Errors: "A field was missing", "Email needs to contain an @ sign", "Unknown error submitting to database"
+
+	Login.php
+		Requires: email, password
+		Returns: $user is a key-value array. 'user' contains the email and 'pass' contains the salted and hashed password.
+		Effects: Logs the user in
+		Errors: "No entered password", "There is no user associated with that email account", "Incorrect Password", "SQL error"
+
+	Reset_Ask.php
+		Requires: email
+		Returns: Message saying "Sent a reset email"
+		Effects: Sends a reset email
+		Errors:"User not found", "SQL error"
+
+	Reset_Grant.php
+		Requires: email, temp_pass, password
+		Returns: Message saying success
+		Effects: Changes the password to the new password
+		Errors: "User doesn't exist", "User doesn't need a password reset", "Thats the incorrect temporary password", "SQL error"
+		
 

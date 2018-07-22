@@ -24,10 +24,16 @@
 		$response['error'] = "Thats the incorrect temporary passowrd";
 		done();
 	}
-	//Enters the temp password into the database
-	stmt1 = $pdo->prepare("UPDATE People SET password = :pa WHERE people_id = :pi");
-	stmt1->execute(array(
-		":pa" => hash("md5", $result[0]["salt"].$_POST["password"]),
-		":pi" => $result[0]['people_id']
-	));
+	try {
+		//Enters the temp password into the database
+		stmt1 = $pdo->prepare("UPDATE People SET password = :pa WHERE people_id = :pi");
+		stmt1->execute(array(
+			":pa" => hash("md5", $result[0]["salt"].$_POST["password"]),
+			":pi" => $result[0]['people_id']
+		));
+		$response['success'] = 'success';
+		done();
+	} catch (\Exception $e) {
+		$response['error'] = 'SQL error';
+	}
 ?>

@@ -7,7 +7,7 @@
     $stmt->execute(array(
       ":na" => $_POST['name']
     ));
-    $respone['result'] = array_slice($stmt->FetchAll(PDO::FETCH_ASSOC), 0, $_POST['num_results']);
+    $response['success'] = array_slice($stmt->FetchAll(PDO::FETCH_ASSOC), 0, $_POST['num_results']);
     done();
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
