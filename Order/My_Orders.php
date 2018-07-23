@@ -46,7 +46,7 @@
     ));
     $response['Finished Orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
   } catch (\Exception $e) {
-    $response['error'] = "Error with fetching the orders that have conflicts";
+    $response['error'] = "Error with fetching the orders conflicts";
   }
   done();
 ?>
