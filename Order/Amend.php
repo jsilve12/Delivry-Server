@@ -23,22 +23,31 @@
     if($key == "email" || $key == "password" || $key == "order_id") continue;
 
     if ($key == "store") {
-      //Retrieves the store
-  		$stmt = $pdo->preare("SELECT * FROM Stores WHERE name = :na");
-  		$stmt->execute(array(
-  			":na" => strtolower(trim($value))
-  		));
-  		$result = $stmt->FetchAll(PDO::FETCH_ASSOC);
+      $result = array();
+      try {
+        //Retrieves the store
+    		$stmt = $pdo->preare("SELECT * FROM Stores WHERE name = :na");
+    		$stmt->execute(array(
+    			":na" => strtolower(trim($value))
+    		));
+    		$result = $stmt->FetchAll(PDO::FETCH_ASSOC);
+      } catch (\Exception $e) {
+        $response['error'] = "SQL error";
+      }
 
-  		$store_id
+  		$store_id;
   		//Adds the store if it doesn't exist
   		if(empty($result))
   		{
-  			$stmt = $pdo->prepare("INSERT INTO Stores(name, num_called) VALUES(:na, 1)");
-  			$stmt->execute(array(
-  				":na" => $_POST['store']
-  			));
-  			$store_id = $pdo->lastInsertId();
+        try {
+          $stmt = $pdo->prepare("INSERT INTO Stores(name, num_called) VALUES(:na, 1)");
+    			$stmt->execute(array(
+    				":na" => $_POST['store']
+    			));
+    			$store_id = $pdo->lastInsertId();
+        } catch (\Exception $e) {
+          $response['error'] = "SQL error";
+        }
   		}
   		//Otherwise the store id is retrived, and the number of times
   		//that store has been called is updated
@@ -55,51 +64,65 @@
     }
     else {
       //This part adds the change to the array that tracks changes
-      $changes[":".$key] => $value;
+      $changes[":".$key] => strtolower(Trim($value));
       $sql_stmt .= $key."= :".$key;
     }
 
   }
-  //Adds the WHERE clause
-  $sql_stmt .= " WHERE order_id = ".$_POST['order_id'];
-  $stmt = $pdo->prepare($sql_stmt);
-  $stmt->execute($changes);
+  try {
+    //Executes the sql that was prepared above
+    $sql_stmt .= " WHERE order_id = ".$_POST['order_id'];
+    $stmt = $pdo->prepare($sql_stmt);
+    $stmt->execute($changes);
+  } catch (\Exception $e) {
+    $response['error'] = "SQL error";
+  }
 
   //Makes the necessary changes to the items
-  //Starts by deleting all the existing Items
-  $stmt = $pdo->prepare("DELETE FROM Items_Placed WHERE order_id = ".$_POST['order_id']);
+  try {
+    //Starts by deleting all the existing Items becauase they have to be re-entered by the app
+    $stmt = $pdo->prepare("DELETE FROM Items_Placed WHERE order_id = ".$_POST['order_id']);
+  } catch (\Exception $e) {
+    $response['error'] = "SQL error";
+  }
   foreach($items as $key => $value)
   {
     //Gets the id of the items (TODO:This could be a function, because this code is from Place)
-    //Retrieves the item name from the database
-    $stmt = $pdo->prepare("SELECT * FROM Items WHERE name = :na");
-    $stmt->execute(array(
-      ":na" => $key
-    ));
-    $result1 = $stmt->FetchAll(PDO::FETCH_ASSOC);
-    $item_id;
-
-    //Adds the item if it doesn't exist
-    if(empty($result))
-    {
-      $stmt = $pdo->prepare("INSERT INTO Items(name, num_called) VALUES(:na, 1)");
+    try {
+      //Retrieves the item name from the database
+      $stmt = $pdo->prepare("SELECT * FROM Items WHERE name = :na");
       $stmt->execute(array(
-        ":na" => $key;
+        ":na" => $key
       ));
-      $item_id = $pdo->lastInsertId();
-    }
-    //Otherwise gets the item id and increments the number of times the item has been called
-    else
-    {
-      $item_id = $result[0]['item_id'];
-    }
+      $result1 = $stmt->FetchAll(PDO::FETCH_ASSOC);
+      $item_id;
 
-    //Enters the ones that remain back in
-    $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(:oi, :de, :ii)");
-    $stmt->execute(array(
-      ":oi" => $_POST['order_id'],
-      ":de" => $value,
-      ":ii" => $item_id
-    ));
+      //Adds the item if it doesn't exist
+      if(empty($result))
+      {
+        $stmt = $pdo->prepare("INSERT INTO Items(name, num_called) VALUES(:na, 1)");
+        $stmt->execute(array(
+          ":na" => $key;
+        ));
+        $item_id = $pdo->lastInsertId();
+      }
+      //Otherwise gets the item id and increments the number of times the item has been called
+      else
+      {
+        $item_id = $result[0]['item_id'];
+      }
+
+      //Enters the ones that remain back in
+      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(:oi, :de, :ii)");
+      $stmt->execute(array(
+        ":oi" => $_POST['order_id'],
+        ":de" => $value,
+        ":ii" => $item_id
+      ));
+    } catch (\Exception $e) {
+      $response['error'] = "SQL error";
+    }
+    $response['success'] = "success";
+    done();
   }
 ?>

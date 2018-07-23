@@ -41,6 +41,7 @@ CREATE TABLE Locations(
 CREATE TABLE stores_item(
 	store_id INTEGER,
 	item_id INTEGER,
+	count INTEGER,
 	time DATETIME
 	CONSTRAINT stores_item_ibfk_1
 		FOREIGN KEY(store_id)
@@ -76,6 +77,7 @@ CREATE TABLE Order_Placed(
 	longitude DOUBLE,
 	latitude DOUBLE,
 	store INTEGER,
+	time TIMESTAMP,
 	CONSTRAINT order_placed_ibfk_1
 		FOREIGN KEY (placed_by)
 		REFERENCES People (people_id)
@@ -109,6 +111,7 @@ CREATE TABLE Order_Accepted(
 	longitude DOUBLE,
 	latitude DOUBLE,
 	store INTEGER,
+	time TIMESTAMP,
 	CONSTRAINT order_accepted_ibfk_1
 		FOREIGN KEY (placed_by)
 		REFERENCES People (people_id)
@@ -148,6 +151,7 @@ CREATE TABLE Order_Finished(
 	longitude DOUBLE,
 	latitude DOUBLE,
 	store INTEGER,
+	time TIMESTAMP,
 	CONSTRAINT order_finished_ibfk_1
 		FOREIGN KEY (placed_by)
 		REFERENCES People (people_id)
@@ -188,6 +192,7 @@ CREATE TABLE Order_Conflict(
 	latitude DOUBLE,
 	store INTEGER,
 	comments VARCHAR(1023),
+	time TIMESTAMP,
 	CONSTRAINT order_conflict_ibfk_1
 		FOREIGN KEY (placed_by)
 		REFERENCES People (people_id)

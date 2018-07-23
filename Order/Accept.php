@@ -21,7 +21,7 @@
 	}
 	catch(\Exception $e)
 	{
-		$respone['error'] = "Order not found in database";
+		$respone['error'] = "SQL error";
 		done();
 	}
 	if(empty($result))
@@ -32,7 +32,6 @@
 
 	//Enters the order into the new database
 	try {
-
 		//Enters the order into the accepted database
 		$stmt = $pdo->prepare("INSERT INTO Order_Accepted(placed_by, accepted_by, address, addr_description, longitude, latitude, store) VALUES(:pb, :ab, :addr, :ad_de, :lo, :la, :st)");
 		$stmt->execute(array(
@@ -75,10 +74,10 @@
 		}
 
 	} catch (\Exception $e) {
-		$response['error'] = "Error entering the entry into the database";
+		$response['error'] = "SQL error";
 		done();
 	}
-	$response['success'] = "Entered into the DB Successfully";
+	$response['success'] = "Success";
 	done();
 
 ?>

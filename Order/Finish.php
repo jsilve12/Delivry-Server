@@ -11,13 +11,11 @@
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
     if(empty($result))
     {
-      $response['error'] = "Error, order not found";
+      $response['error'] = "Order not found";
       done();
     }
-    $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id= ".$_POST['order_id']);
-    $stmt->execute();
   } catch (\Exception $e) {
-    $response['error'] = "SQL error retrieving the order";
+    $response['error'] = "SQL error";
   }
   $id;
 
@@ -28,7 +26,7 @@
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
       ":re" => $_POST["receipt_name"],
-      ":pr" => $_POST['price'],
+      ":pr" => strtolower(trim($_POST['price'])),
       ":ad" => $result[0]["address"],
       ":ad_de" => $result[0]["addr_description"],
       ":lo" => $result[0]["longitude"],
@@ -37,7 +35,7 @@
     ));
     $id = $pdo->LastInsertId();
   } catch (\Exception $e) {
-    $response['error'] = "SQL error submitting the order";
+    $response['error'] = "SQL error ";
     done();
   }
 
@@ -48,22 +46,33 @@
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
     if(empty($result))
     {
-      $response['error'] = "SQL error recieving items from the database";
+      $response['error'] = "SQL error";
       done();
     }
-    //Deletes them from the previous database
-    $stmt = $pdo->prepare("DELETE FROM Items_Accepted WHERE order_id =".$_POST['order_id']);
+  }
+  catch(\Exception $e)
+  {
+    $response['error'] = "SQL error";
+    done();
+  }
     foreach($result as $value)
     {
-      //Enters each item back into the database
-      $stmt = $pdo->prepare("INSERT INTO Items_Finished(order_id, description, item_id) VALUES(:oi, :de, :ii)");
-      $stmt->execute(array(
-        ":oi" => $id,
-        ":de" => $value['description'],
-        ":ii" => $value['item_id']
-      ));
+      try {
+        //Enters each item back into the database
+        $stmt = $pdo->prepare("INSERT INTO Items_Finished(order_id, description, item_id) VALUES(:oi, :de, :ii)");
+        $stmt->execute(array(
+          ":oi" => $id,
+          ":de" => $value['description'],
+          ":ii" => $value['item_id']
+        ));
+      } catch (\Exception $e) {
+        $response['error'] = "SQL error";
+        done();
+      }
     }
-  }
-  $response['success'] = "Done";
+    //Deletes everything
+    $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id= ".$_POST['order_id']);
+    $stmt->execute();
+  $response['success'] = "success";
   done();
 ?>

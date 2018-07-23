@@ -1,15 +1,18 @@
 <?php
   require_once("Functions.php");
   start();
-
-  //Makes sure the order hasn't been completed
-  $stmt = $pdo->prepare("SELECT * FROM Order_Accepted WHERE order_id = ".$_POST['order_id']);
-  $stmt->execute();
-  $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
-  if(empty($result))
-  {
-    $response['error'] = 'Order not found';
-    done();
+  try {
+    //Makes sure the order hasn't been completed
+    $stmt = $pdo->prepare("SELECT * FROM Order_Accepted WHERE order_id = ".$_POST['order_id']);
+    $stmt->execute();
+    $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
+    if(empty($result))
+    {
+      $response['error'] = 'Order not found';
+      done();
+    }
+  } catch (\Exception $e) {
+    $response['error'] = "SQL error";
   }
 
   //Moves the order back into order placed
@@ -34,8 +37,11 @@
       $stmt = $pdo->prepare("INSERT INTO Items_Placed WHERE order_id = ".$id);
       $stmt->execute();
     }
+    //Deletes the order from Order_Accepted
+    $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id = ".$_POST['order_id']);
+    $stmt->execute();
   } catch (\Exception $e) {
-    $response['error'] = "Item couldn't be moved to Placed";
+    $response['error'] = "SQL error";
     done();
   }
 

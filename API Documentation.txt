@@ -45,4 +45,39 @@ Login
 		Effects: Changes the password to the new password
 		Errors: "User doesn't exist", "User doesn't need a password reset", "Thats the incorrect temporary password", "SQL error"
 		
+Order
+	Accept.php
+		Requires: email, password (salted and hashed), order_id
+		Returns: Message saying success
+		Effects: Accepts an order with order id order_id on behalf of the current user.
+		Errors:	"Order id not found", "SQL error", "Result set from database is empty"
+	
+	Amend.php
+		NOTE: calling this function deletes all the items stored in the database. The items must be re-entered
+		Requires: email, password (salted and hashed), order_id, variable names corresponding with the variables that you want changed
+		Returns: Message saying success
+		Effects: Amends any order which hasn't been accepted yet with the necessary information
+		Errors: "Order can not be Amended" (It's been accepted), SQL error
+
+	Cancel_Accept.php
+		NOTE: Only doable when in the Accepted category
+		Requires: email, password (salted and hashed), order_id
+		Returns: Message saying success
+		Effects: Moves the order from the accepted to placed category (back a step)
+		Errors: "SQL error"
+	
+	Cancel_Placed.php
+		NOTE: Only doable when in the Placed category
+		Requires: email, password (salted and hashed), order_id
+		Returns: success
+		Effects: Deletes the entry
+		Errors: "SQL error", "That entry doesn't exist"
+
+	Finish.php
+		NOTE: Only doable when in the Accepted category
+		Requires: email, password (salted and hashed), order_id, price, receipt_name (the filename of the receipt), receipt (this will be an image of the receipt)
+		Returns: success
+		Effects: Moves the order to Finished
+
+TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, accept projected prices from users
 
