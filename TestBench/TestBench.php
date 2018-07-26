@@ -21,7 +21,7 @@
       echo("<h2>Server TestBench for ".$this->folder."/".$page.".php </h2> </br>
       <form> <p>");
       foreach ($inps as $key) {
-        echo($key.": <input type='text' id=".$key."/>
+        echo($key.": <input type='text' id='".$key."'/>
         </p> </br>");
       }
       echo("<p>submit <input type ='submit' id = '".$page."_submit'
@@ -43,7 +43,7 @@
             ");
             //Please excuse the interruption in javascript to allow for the parameters to be entered
             foreach ($inps as $value) {
-              echo($value.":document.getElementById('".$value."'),");
+              echo($value.":document.getElementById('".$value."').value,");
             }
             //This line is necessary to avoid an error from having a comma on the last row. The values are junk
             echo("never_use_this:'abcdef'");
