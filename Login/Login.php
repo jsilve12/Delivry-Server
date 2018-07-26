@@ -4,7 +4,7 @@
 	$response = array();
 
 	//Finds the appropriate salt based on the email
-	if(!isset($_POST['email']) || strlen($_POST['email']) < 1 || !strpos($_POST['email'])))
+	if(!isset($_POST['email']) || strlen($_POST['email']) < 1 || !strpos($_POST['email']))
 	{
 		$response['error'] = "No email entered email";
 		done($response);
@@ -23,7 +23,7 @@
 			$stmt->execute(array(
 				":em" => $_POST['email']
 			));
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC)
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			//Processes the login based on whether there is an associated user
 			if(empty($result))
