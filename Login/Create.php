@@ -5,7 +5,7 @@
 	if(!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['salt']) || !isset($_POST['password']) || strlen($_POST['name']) < 1 || strlen($_POST['email']) < 1 || strlen($_POST['salt']) < 1 || strlen($_POST['password']) < 1)
 	{
 		$response['error'] = "A Field was Missing";
-		done();
+		done($response);
 	}
 	//Checks to make sure there's an @
 	if(!strpos($_POST['email'], "@"))
@@ -26,7 +26,7 @@
 		$response['success'] = "Account created";
 		//TODO: Send email to User
 	}
-	catch(e)
+	catch(\Exception $e)
 	{
 		$response['error'] = "Unknown error submitting to database";
 	}

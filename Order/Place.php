@@ -7,7 +7,7 @@
 	if(!(isset($_POST['items']) && isset($_POST['address']) && isset($_POST['addr_desc']) && isset($_POST['long']) && isset($_POST['lat']) && isset($_POST['store'])))
 	{
 		$response['error'] = "Missing a variable";
-		done();
+		done($response);
 	}
 
 	//Creates the Order Placed entry
@@ -23,7 +23,7 @@
 	catch(/Exception $e)
 	{
 		$response['error'] = "SQL error";
-		done();
+		done($response);
 	}
 
 		$store_id;
@@ -38,7 +38,7 @@
 				$store_id = $pdo->lastInsertId();
 			} catch (\Exception $e) {
 				$response['error'] = "SQL error";
-				done();
+				done($response);
 			}
 		}
 		//Otherwise the store id is retrived, and the number of times
@@ -51,7 +51,7 @@
 			$stmt->execute();
 			} catch (\Exception $e) {
 				$response['error'] = "SQL error";
-				done();
+				done($response);
 			}
 		}
 		try {
@@ -68,7 +68,7 @@
 			$order_id = $pdo->lastInsertId();
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
-			done();
+			done($response);
 		}
 
 		try {
@@ -115,8 +115,8 @@
 			}
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
-			done();
+			done($response);
 		}
 	$response['success'] = "success";
-	done();
+	done($response);
 ?>

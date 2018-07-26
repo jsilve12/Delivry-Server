@@ -7,7 +7,7 @@
 	if(!isset($_POST['order_id']))
 	{
 		$response['error'] = "Order id not found";
-		done();
+		done($response);
 	}
 
 	try
@@ -22,12 +22,12 @@
 	catch(\Exception $e)
 	{
 		$respone['error'] = "SQL error";
-		done();
+		done($response);
 	}
 	if(empty($result))
 	{
 		$response['error'] = "Result set from database is empty";
-		done();
+		done($response);
 	}
 
 	//Enters the order into the new database
@@ -75,9 +75,9 @@
 
 	} catch (\Exception $e) {
 		$response['error'] = "SQL error";
-		done();
+		done($response);
 	}
 	$response['success'] = "Success";
-	done();
+	done($response);
 
 ?>

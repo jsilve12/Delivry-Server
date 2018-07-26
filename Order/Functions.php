@@ -39,14 +39,14 @@
 		var $destination;
 		var $items = array();
 
-		function __construct($a, $b, $c, $d);
+		function __construct($a, $b, $c, $d)
 		{
 			$this->placed_by = $a;
 			$this->store = $b;
 			$this->destination = $c;
 			$this->items = $d;
 		}
-		function __construct1($a, $b, $c);
+		function __construct1($a, $b, $c)
 		{
 			$this->placed_by = $a;
 			$this->store = $b;
@@ -54,11 +54,11 @@
 		}
 		function add_item($item)
 		{
-			this->items[] = $item;
+			$this->items[] = $item;
 		}
 	}
 
-	function done()
+	function done($response)
 	{
 		echo json_encode($response);
 		exit;
@@ -66,7 +66,7 @@
 	function verify_user()
 	{
 		//Ensures that the user exists
-		if(isset($_POST['email']) && isset($_POST['password'])
+		if(isset($_POST['email']) && isset($_POST['password']))
 		{
 			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em AND password = :pa");
 			$stmt->execute(array(
@@ -84,7 +84,7 @@
 	function get_user()
 	{
 		//Ensures that the user exists
-		if(isset($_POST['email']) && isset($_POST['password'])
+		if(isset($_POST['email']) && isset($_POST['password']))
 		{
 			$stmt = $pdo->prepare("SELECT * FROM People WHERE email = :em AND password = :pa");
 			$stmt->execute(array(
@@ -122,8 +122,8 @@
 	{
 		if(!verify_user())
 		{
-			response['error'] = "User not found";
-			done();
+			$response['error'] = "User not found";
+			done($response);
 		}
 		return get_user();
 	}

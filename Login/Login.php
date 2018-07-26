@@ -7,13 +7,13 @@
 	if(!isset($_POST['email']) || strlen($_POST['email']) < 1 || !strpos($_POST['email'])))
 	{
 		$response['error'] = "No email entered email";
-		done();
+		done($response);
 	}
 
 	else if(!isset($_POST['password']) || strlen($_POST['password']) < 1)
 	{
 		$response['error'] = "No entered password";
-		done();
+		done($response);
 	}
 
 	else
@@ -29,7 +29,7 @@
 			if(empty($result))
 			{
 				$response['error'] = "There is no user associated with that email account";
-				done();
+				done($response);
 			}
 			//Sees if the passwords match
 			$entered = hash("md5", $result[0]['salt'].$_POST['password']);
@@ -41,16 +41,16 @@
 					'pass' => $result['password']
 				);
 				$response['success'] = $user;
-				done();
+				done($response);
 			}
 			else
 			{
 				$response['error'] = "Incorrect Password";
-				done();
+				done($response);
 			}
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
-			done();
+			done($response);
 		}
 	}
 ?>

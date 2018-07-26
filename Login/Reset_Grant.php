@@ -6,7 +6,7 @@
 	if(empty($result))
 	{
 		$response['error'] = "User doesn't exist";
-		done();
+		done($response);
 	}
 	//Gets and verifies the temp password
 	$stmt = $pdo->prepare("SELECT * FROM Reset_Password WHERE people_id = :pi");
@@ -17,12 +17,12 @@
 	if(empty($result1))
 	{
 		$response['error'] = "User doesn't need a password reset";
-		done();
+		done($response);
 	}
 	else if($result1[0]['temp_pass'] != $_POST['temp_pass'])
 	{
 		$response['error'] = "Thats the incorrect temporary passowrd";
-		done();
+		done($response);
 	}
 	try {
 		//Enters the temp password into the database
@@ -32,7 +32,7 @@
 			":pi" => $result[0]['people_id']
 		));
 		$response['success'] = 'success';
-		done();
+		done($response);
 	} catch (\Exception $e) {
 		$response['error'] = 'SQL error';
 	}

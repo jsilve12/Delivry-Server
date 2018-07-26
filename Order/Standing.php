@@ -5,7 +5,7 @@
 	if(!isset($_POST['long']) || !isset($_POST['lat']))
 	{
 		$response['error'] = "Longitude or Latitude are missing";
-		done();
+		done($response);
 	}
 	$arr = miles2degrees($_POST['lat'], $_POST['long'], $_POST['diff']);
 
@@ -22,10 +22,10 @@
 				":sn" => $_POST['store']
 			));
 			$result['orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
-			done();
+			done($response);
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
-			done();
+			done($response);
 		}
 	}
 	//If there is no store
@@ -40,10 +40,10 @@
 				":lath" => $_POST['lat'] + arr[1]
 			));
 			$result['orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
-			done();
+			done($response);
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
-			done();
+			done($response);
 		}
 	}
 ?>

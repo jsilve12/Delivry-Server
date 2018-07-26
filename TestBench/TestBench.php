@@ -52,7 +52,7 @@
           success:function(data)
           {
             console.log('succeeded');
-            $('#".$page."').text() = 'The Result is ' + data.toString();
+            $('#".$page."').text('The Result is ' + data.toString());
           }
         })
       })

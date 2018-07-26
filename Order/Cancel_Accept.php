@@ -9,7 +9,7 @@
     if(empty($result))
     {
       $response['error'] = 'Order not found';
-      done();
+      done($response);
     }
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
@@ -42,7 +42,7 @@
     $stmt->execute();
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
-    done();
+    done($response);
   }
 
 ?>

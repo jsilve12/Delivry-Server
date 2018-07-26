@@ -7,7 +7,7 @@
 	if(empty($result))
 	{
 		$response['error'] = "User not found";
-		done();
+		done($response);
 	}
 	try {
 		//Creates a new, temporary, password (thanks @https://www.thecodedeveloper.com/generate-random-alphanumeric-string-with-php/)
@@ -20,9 +20,9 @@
 		//TODO: Send an email to the person with the temp password
 
 		$response['success'] = "Sent a reset email";
-		done();
+		done($response);
 	} catch (\Exception $e) {
 		$response['error'] = "SQL error";
-		done();
+		done($response);
 	}
 ?>

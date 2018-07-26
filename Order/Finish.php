@@ -12,7 +12,7 @@
     if(empty($result))
     {
       $response['error'] = "Order not found";
-      done();
+      done($response);
     }
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
@@ -36,7 +36,7 @@
     $id = $pdo->LastInsertId();
   } catch (\Exception $e) {
     $response['error'] = "SQL error ";
-    done();
+    done($response);
   }
 
   //Finds the items in the database
@@ -47,13 +47,13 @@
     if(empty($result))
     {
       $response['error'] = "SQL error";
-      done();
+      done($response);
     }
   }
   catch(\Exception $e)
   {
     $response['error'] = "SQL error";
-    done();
+    done($response);
   }
     foreach($result as $value)
     {
@@ -67,12 +67,12 @@
         ));
       } catch (\Exception $e) {
         $response['error'] = "SQL error";
-        done();
+        done($response);
       }
     }
     //Deletes everything
     $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id= ".$_POST['order_id']);
     $stmt->execute();
   $response['success'] = "success";
-  done();
+  done($response);
 ?>

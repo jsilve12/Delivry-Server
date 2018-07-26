@@ -17,11 +17,11 @@
 			":pa" => $_POST['password']
 		));
 		$result['success'] = "Success";
-		done();
+		done($response);
 	}
 	catch(e)
 	{
 		$result['error'] = "SQL entered improperly";
-		done();
+		done($response);
 	}
 ?>

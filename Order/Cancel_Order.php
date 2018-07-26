@@ -15,7 +15,7 @@
   if(empty($result))
   {
     $response['error'] = "That entry doesn't exist";
-    done();
+    done($response);
   }
   try {
     //Actually deletes the entries
@@ -32,5 +32,5 @@
     $response['error'] = "SQL error";
   }
   $response['success'] = "success";
-  done();
+  done($response);
 ?>

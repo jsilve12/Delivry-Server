@@ -8,10 +8,10 @@
       ":na" => $_POST['name']
     ));
     $response['success'] = array_slice($stmt->FetchAll(PDO::FETCH_ASSOC), 0, $_POST['num_results']);
-    done();
+    done($response);
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
-    done();
+    done($response);
   }
 
 ?>

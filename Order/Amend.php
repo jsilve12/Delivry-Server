@@ -12,7 +12,7 @@
   if(empty($result))
   {
     $response['error'] = "Order can not be Amended";
-    done();
+    done($response);
   }
   $changes = array();
   $items = array();
@@ -123,6 +123,6 @@
       $response['error'] = "SQL error";
     }
     $response['success'] = "success";
-    done();
+    done($response);
   }
 ?>

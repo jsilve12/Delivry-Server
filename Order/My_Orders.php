@@ -13,7 +13,7 @@
     $response['My Placed Orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
   } catch (\Exception $e) {
     $response['error'] = "Error with fetching the orders placed";
-    done();
+    done($response);
   }
 
   //Orders Accepted (Either the placer or deliverer)
@@ -48,5 +48,5 @@
   } catch (\Exception $e) {
     $response['error'] = "Error with fetching the orders conflicts";
   }
-  done();
+  done($response);
 ?>

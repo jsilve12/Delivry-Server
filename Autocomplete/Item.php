@@ -9,9 +9,9 @@
       ":it" => strtolower(trim($_POST['item']))
     ));
     $response['result'] = array_slice($stmt->FetchAll(PDO::FETCH_ASSOC), 0, $_POST['num_results']);
-    done();
+    done($response);
   } catch (\Exception $e) {
     $response['error'] = "Error retrieving information from the database";
-    done();
+    done($response);
   }
 ?>
