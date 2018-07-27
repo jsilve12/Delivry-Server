@@ -87,10 +87,10 @@ Order
 		Errors: "Error with fetching the orders placed", "Error with fetching the orders accepted", "Error with fetching the orders finished", "Error with fetching the orders conflicts"
 
 	Place.php
-		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions), address, addr_desc (address description), long, lat, store
+		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions, however enter it as a string Ex: Pear=>round,Apple=>square), address, addr_desc (address description), long, lat, store
 		Returns: success
 		Effects: Enters a new entry into the database
-		Errors: "Missing a variable", "SQL error",
+		Errors: "Missing a variable", "SQL error", "Items isn't an array"
 
 	Standing.php
 		Requires: email, password (salted and hashed), long, lat, diff (total distance range you want included), (optional) store

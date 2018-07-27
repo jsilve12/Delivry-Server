@@ -9,18 +9,27 @@
 		$response['error'] = "Missing a variable";
 		done($response);
 	}
+	//Makes sure item is an array
+	if(!gettype($_POST['items'] == "array"))
+	{
+		$response['error'] = "Items isn't an array";
+		done($response);
+	}
+	else {
+		$_POST['items'] = string2arr($_POST['items']);
+	}
 
 	//Creates the Order Placed entry
 	try
 	{
 		//Retrieves the store
-		$stmt = $pdo->preare("SELECT * FROM Stores WHERE name = :na");
+		$stmt = $pdo->prepare("SELECT * FROM Stores WHERE name = :na");
 		$stmt->execute(array(
 			":na" => strtolower(trim($_POST['store']))
 		));
 		$result = $stmt->FetchAll(PDO::FETCH_ASSOC);
 	}
-	catch(/Exception $e)
+	catch(\Exception $e)
 	{
 		$response['error'] = "SQL error";
 		done($response);
@@ -63,14 +72,13 @@
 				":ad_de" => $_POST['addr_desc'],
 				":long" => $_POST['long'],
 				":lat" => $_POST['lat'],
-				":stor" => $store_id;
+				":stor" => $store_id
 			));
 			$order_id = $pdo->lastInsertId();
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
 			done($response);
 		}
-
 		try {
 			//Enters in each item
 			foreach($_POST['items'] as $key => $value)
@@ -80,23 +88,26 @@
 				$stmt->execute(array(
 					":na" => $key
 				));
-				$result1 = $stmt->FetchAll(PDO::FETCH_ASSOC);
+				$result1= $stmt->FetchAll(PDO::FETCH_ASSOC);
 				$item_id;
 
 				//Adds the item if it doesn't exist
-				if(empty($result))
+				if(empty($result1))
 				{
 					$stmt = $pdo->prepare("INSERT INTO Items(name, num_called) VALUES(:na, 1)");
 					$stmt->execute(array(
-						":na" => $key;
+						":na" => $key
 					));
 					$item_id = $pdo->lastInsertId();
 				}
 				//Otherwise gets the item id and increments the number of times the item has been called
 				else
 				{
-					$item_id = $result[0]['item_id'];
-					$stmt = $pdo->prepare("UPDATE * Items SET num_called = ".++($result1[0]['num_called']));
+					$item_id = $result1[0]['item_id'];
+					$stmt = $pdo->prepare("UPDATE * Items SET num_called = :n");
+					$stmt->execute(array(
+						":n" => (++$result1[0]['num_called'])
+					));
 				}
 
 				//Deals with the table that tracks how many times an item is purchased at a store
@@ -108,7 +119,7 @@
 					));
 
 				//Connects the item to the order
-				$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(".$order_id", :desc, ".$item_id.")");
+				$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(".$order_id.", :desc, ".$item_id.")");
 				$stmt->execute(array(
 					":desc" => $value
 				));

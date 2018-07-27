@@ -130,6 +130,17 @@
 		}
 		return get_user($pdo);
 	}
+	function string2arr($arr)
+	{
+		$output = array();
+		$array = explode(",",$arr);
+		foreach($array as $it)
+		{
+			list($key, $value) = explode("=>", $it);
+			$output[$key] = $value;
+		}
+		return $output;
+	}
 	//Don't forget to implement
 	function email($content, $recipient)
 	{
