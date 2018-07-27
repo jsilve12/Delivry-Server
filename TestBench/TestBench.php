@@ -25,7 +25,7 @@
         echo($key.": <input type='text' id='".$key."_".$page."'/>
         </p> </br>");
       }
-      echo("<p>submit <input type ='submit' id = '".$page."_submit'
+      echo("<p>submit <input type ='submit' id = '".$page."_submit'/>
       </form>
       <div id='".$page."'/></div> </br>");
 
