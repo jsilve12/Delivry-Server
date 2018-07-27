@@ -27,7 +27,7 @@
       }
       echo("<p>submit <input type ='submit' id = '".$page."_submit'
       </form>
-      <div id='".$page."'/><div> </br>");
+      <div id='".$page."'/></div> </br>");
 
       //Handles the Javascript (new echo for readibility)
       echo("<script>

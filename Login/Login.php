@@ -4,7 +4,7 @@
 	$response = array();
 
 	//Finds the appropriate salt based on the email
-	if(!isset($_POST['email']) || strlen($_POST['email']) < 1 || !strpos($_POST['email']))
+	if(!isset($_POST['email']) || strlen($_POST['email']) < 1 || !strpos($_POST['email'], "@"))
 	{
 		$response['error'] = "No email entered email";
 		done($response);
@@ -33,12 +33,11 @@
 			}
 			//Sees if the passwords match
 			$entered = hash("md5", $result[0]['salt'].$_POST['password']);
-
-			if($entered == $result['password'])
+			if($entered == $result[0]['password'])
 			{
 				$user = array(
 					'user' => $_POST['email'],
-					'pass' => $result['password']
+					'pass' => $result[0]['password']
 				);
 				$response['success'] = $user;
 				done($response);
