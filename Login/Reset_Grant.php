@@ -11,7 +11,7 @@
 	//Gets and verifies the temp password
 	$stmt = $pdo->prepare("SELECT * FROM Reset_Password WHERE people_id = :pi");
 	$stmt->execute(array(
-		":pi" => $result[0]["people_id"];
+		":pi" => $result[0]["people_id"]
 	));
 	$result1 = $stmt->FetchAll(PDO::FETCH_ASSOC);
 	if(empty($result1))
@@ -26,8 +26,8 @@
 	}
 	try {
 		//Enters the temp password into the database
-		stmt1 = $pdo->prepare("UPDATE People SET password = :pa WHERE people_id = :pi");
-		stmt1->execute(array(
+		$stmt1 = $pdo->prepare("UPDATE People SET password = :pa WHERE people_id = :pi");
+		$stmt1->execute(array(
 			":pa" => hash("md5", $result[0]["salt"].$_POST["password"]),
 			":pi" => $result[0]['people_id']
 		));
