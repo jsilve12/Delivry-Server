@@ -21,6 +21,7 @@
       //echos the form and div tag
       echo("<h2>Server TestBench for ".$this->folder."/".$page.".php </h2> </br>
       <form> <p>");
+      //If you're entering arrays, make sure to format them properly
       foreach ($inps as $key) {
         echo($key.": <input type='text' id='".$key."_".$page."'/>
         </p> </br>");
