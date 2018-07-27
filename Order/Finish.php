@@ -1,7 +1,7 @@
 <?php
   //TODO: Add a portal for the receipt to be submitted
   require_once("Functions.php");
-  start();
+  start($pdo);
 
   //Deletes the entry from Accepted
   $result = array();

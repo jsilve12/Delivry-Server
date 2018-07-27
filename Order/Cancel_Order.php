@@ -1,6 +1,6 @@
 <?php
   require_once("Functions.php");
-  start();
+  start($pdo);
 
   try {
     //You can only do this if the order hasn't been accepted, this makes sure they haven't

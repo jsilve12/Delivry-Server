@@ -1,6 +1,6 @@
 <?php
   require_once("Functions.php");
-  $user = start();
+  $user = start($pdo);
   $response = array();
 
   //Yes I know theres a lot of repitiion, and this file will be re-written (JS 7-2018)

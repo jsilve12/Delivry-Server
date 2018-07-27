@@ -2,7 +2,7 @@
 	require_once("../Order/Functions.php");
 
 	//Gets and verifies the user
-	$result = get_user_email();
+	$result = get_user_email($pdo);
 	if(empty($result))
 	{
 		$response['error'] = "User doesn't exist";

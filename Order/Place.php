@@ -1,7 +1,7 @@
 <?php
 	require_once("../Order/Functions.php");
-	$user = get_user();
-	start();
+	$user = get_user($pdo);
+	start($pdo);
 
 	//Verifies the required input is available
 	if(!(isset($_POST['items']) && isset($_POST['address']) && isset($_POST['addr_desc']) && isset($_POST['long']) && isset($_POST['lat']) && isset($_POST['store'])))

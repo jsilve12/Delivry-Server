@@ -1,6 +1,6 @@
 <?php
   require_once("Functions.php");
-  start();
+  start($pdo);
   try {
     //Makes sure the order hasn't been completed
     $stmt = $pdo->prepare("SELECT * FROM Order_Accepted WHERE order_id = ".$_POST['order_id']);

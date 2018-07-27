@@ -1,6 +1,6 @@
 <?php
   require_once("../Order/Functions.php");
-  start();
+  start($pdo);
 
   try {
     //Gets results based on the most common Items

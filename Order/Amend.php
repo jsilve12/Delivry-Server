@@ -3,7 +3,7 @@
   //TODO: Trim and tolower all user data that goes into a database
   //TODO: Change the numbers in how often stores are hit and how items correlate to stores
   require_once("Functions.php");
-  start();
+  start($pdo);
 
   $stmt = $pdo->prepare("SELECT * FROM Order_Placed WHERE order_id = ".$_POST['order_id']);
   $stmt->execute();

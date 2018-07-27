@@ -3,7 +3,7 @@
 	$response = array();
 
 	//Verifies that its a real user
-	$result = $get_user_email();
+	$result = $get_user_email($pdo);
 	if(empty($result))
 	{
 		$response['error'] = "User not found";

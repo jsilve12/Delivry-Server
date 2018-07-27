@@ -1,6 +1,6 @@
 <?php
 	require_once("Functions.php");
-	start();
+	start($pdo);
 
 	if(!isset($_POST['long']) || !isset($_POST['lat']))
 	{

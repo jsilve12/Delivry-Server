@@ -66,7 +66,7 @@
 		echo json_encode($response);
 		exit;
 	}
-	function verify_user()
+	function verify_user($pdo)
 	{
 		//Ensures that the user exists
 		if(isset($_POST['email']) && isset($_POST['password']))
@@ -84,7 +84,7 @@
 		}
 		return false;
 	}
-	function get_user()
+	function get_user($pdo)
 	{
 		//Ensures that the user exists
 		if(isset($_POST['email']) && isset($_POST['password']))
@@ -103,7 +103,7 @@
 		}
 		return false;
 	}
-	function get_user_email()
+	function get_user_email($pdo)
 	{
 		//Ensures that the user exists
 		if(isset($_POST['email']))
@@ -121,14 +121,14 @@
 		}
 		return false;
 	}
-	function start()
+	function start($pdo)
 	{
-		if(!verify_user())
+		if(!verify_user($pdo))
 		{
 			$response['error'] = "User not found";
 			done($response);
 		}
-		return get_user();
+		return get_user($pdo);
 	}
 	//Don't forget to implement
 	function email($content, $recipient)

@@ -1,6 +1,6 @@
 <?php
 	require_once("Functions.php");
-	$user = start();
+	$user = start($pdo);
 
 	//The current user is considered to be the one placing the order
 

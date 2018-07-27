@@ -1,6 +1,6 @@
 <?php
   require_once("Store.php");
-  start();
+  start($pdo);
 
   try {
     $stmt = $pdo->prepare("SELECT name FROM Stores WHERE name like :na ORDER BY num_called DESC");
