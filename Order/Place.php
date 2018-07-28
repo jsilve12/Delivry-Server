@@ -31,7 +31,7 @@
 	}
 	catch(\Exception $e)
 	{
-		$response['error'] = "SQL error";
+		$response['error'] = "SQL error 1";
 		done($response);
 	}
 
@@ -46,7 +46,7 @@
 				));
 				$store_id = $pdo->lastInsertId();
 			} catch (\Exception $e) {
-				$response['error'] = "SQL error";
+				$response['error'] = "SQL error 2";
 				done($response);
 			}
 		}
@@ -59,7 +59,7 @@
 			$stmt = $pdo->prepare("UPDATE Stores SET num_called = ".++$result[0]['num_called']." WHERE store_id = ".$result[0]['store_id']);
 			$stmt->execute();
 			} catch (\Exception $e) {
-				$response['error'] = "SQL error";
+				$response['error'] = "SQL error 3";
 				done($response);
 			}
 		}
@@ -76,7 +76,7 @@
 			));
 			$order_id = $pdo->lastInsertId();
 		} catch (\Exception $e) {
-			$response['error'] = "SQL error";
+			$response['error'] = "SQL error 4";
 			done($response);
 		}
 		try {
@@ -104,20 +104,20 @@
 				else
 				{
 					$item_id = $result1[0]['item_id'];
-					$stmt = $pdo->prepare("UPDATE * Items SET num_called = :n");
+					$stmt = $pdo->prepare("UPDATE Items SET num_called = :n WHERE item_id = :id");
 					$stmt->execute(array(
-						":n" => (++$result1[0]['num_called'])
+						":n" => ($result1[0]['num_called'] + 1),
+						":id" => $item_id
 					));
 				}
 
 				//Deals with the table that tracks how many times an item is purchased at a store
 				//Adds a Row
-					$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, DT) VALUES(:si , :ii , ".date("Y-m-d H:i:s").")");
+					$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id) VALUES(:si , :ii)");
 					$stmt->execute(array(
 						":si" => $store_id,
 						":ii" => $item_id
 					));
-
 				//Connects the item to the order
 				$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(".$order_id.", :desc, ".$item_id.")");
 				$stmt->execute(array(
@@ -125,7 +125,7 @@
 				));
 			}
 		} catch (\Exception $e) {
-			$response['error'] = "SQL error";
+			$response['error'] = "SQL error 5";
 			done($response);
 		}
 	$response['success'] = "success";
