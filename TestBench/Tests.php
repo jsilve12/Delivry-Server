@@ -14,7 +14,7 @@
     $Login_Tb->build_test('Reset_Ask', array('email'));
     $Login_Tb->build_test('Reset_Grant', array('email','temp_pass','password'));
     echo("</br>");
-
+    
     $Order_Tb = new TestBench('Order');
     $Order_Tb->build_test('Place', array('email', 'password', 'items', 'address', 'addr_desc', 'long', 'lat', 'store'));
     $Order_Tb->build_test('Standing', array('email', 'password', 'long','lat', 'diff', 'store'));
