@@ -1,6 +1,7 @@
 <?php
 	require_once("Functions.php");
 	$user = start($pdo);
+	$response;
 
 	//The current user is considered to be the one placing the order
 
@@ -13,15 +14,15 @@
 	try
 	{
 		//Pulls the order from the database
-		$stmt = $pdo->prepare("SELECT p.order_id, p.placed_by, p.address, p.addr_description, p.longitude, p.latitude, p.store, i.description, i.order_id FROM Order_Placed AS p INNER JOIN Items_Placed AS i ON p.order_id=i.order.id WHERE p.order_id = :ID");
+		$stmt = $pdo->prepare("SELECT p.order_id, p.placed_by, p.address, p.addr_description, p.longitude, p.latitude, p.store, i.description, i.order_id, i.item_id FROM Order_Placed AS p INNER JOIN Items_Placed AS i ON p.order_id=i.order_id WHERE p.order_id = :ID");
 		$stmt->execute(array(
-			":ID" = $_POST['order_id']
+			":ID" => $_POST['order_id']
 		));
 		$result = $stmt->FetchAll(PDO::FETCH_ASSOC);
 	}
 	catch(\Exception $e)
 	{
-		$respone['error'] = "SQL error";
+		$response['error'] = "SQL error";
 		done($response);
 	}
 	if(empty($result))
@@ -48,8 +49,8 @@
 		//Deletes the object in the items placed database
 		$stmt = $pdo->prepare("DELETE FROM Order_Placed WHERE order_id = :oi");
 		$stmt->execute(array(
-			":oi" => $_POST['order_id'];
-		))
+			":oi" => $_POST['order_id']
+		));
 
 		//Adds the items to the order
 		foreach($result as $value)
@@ -63,13 +64,6 @@
 				":oi" => $ID,
 				":de" => $value['description'],
 				":ii" => $value['item_id']
-			));
-
-			//Deletes the old entries
-			$stmt = $pdo->prepare("DELETE FROM Items_Placed WHERE item_id = :ii AND order_id = oi ");
-			$stmt->execute(array(
-				":ii" =>$value['item_id'],
-				":oi" =>$_POST['order_id']
 			));
 		}
 
