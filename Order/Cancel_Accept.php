@@ -3,8 +3,10 @@
   start($pdo);
   try {
     //Makes sure the order hasn't been completed
-    $stmt = $pdo->prepare("SELECT * FROM Order_Accepted WHERE order_id = ".$_POST['order_id']);
-    $stmt->execute();
+    $stmt = $pdo->prepare("SELECT * FROM Order_Accepted WHERE order_id = :oi");
+    $stmt->execute(array(
+      ":oi" => $_POST['order_id']
+    ));
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
     if(empty($result))
     {
@@ -34,15 +36,22 @@
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
     foreach($result as $key => $value)
     {
-      $stmt = $pdo->prepare("INSERT INTO Items_Placed WHERE order_id = ".$id);
-      $stmt->execute();
+      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, item_id, description) VALUES(:oi, :ii, :de)");
+      $stmt->execute(array(
+        ":oi" => $id,
+        ":ii" => $value['item_id'],
+        ":de" => $value['description']
+      ));
     }
     //Deletes the order from Order_Accepted
     $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id = ".$_POST['order_id']);
     $stmt->execute();
   } catch (\Exception $e) {
+    echo($e);
     $response['error'] = "SQL error";
     done($response);
   }
+  $response['success'] = 'success';
+  done($response);
 
 ?>
