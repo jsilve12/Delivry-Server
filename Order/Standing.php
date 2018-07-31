@@ -18,7 +18,7 @@
 				":lonl" => $_POST['long'] - $arr[0],
 				":lonh" => $_POST['long'] + $arr[0],
 				":latl" => $_POST['lat'] - $arr[1],
-				":lath" => $_POST['lat'] + arr[1],
+				":lath" => $_POST['lat'] + $arr[1],
 				":sn" => $_POST['store']
 			));
 			$result['orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@
 				":lonl" => $_POST['long'] - $arr[0],
 				":lonh" => $_POST['long'] + $arr[0],
 				":latl" => $_POST['lat'] - $arr[1],
-				":lath" => $_POST['lat'] + arr[1]
+				":lath" => $_POST['lat'] + $arr[1]
 			));
 			$result['orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
 			done($response);

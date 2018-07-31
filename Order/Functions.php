@@ -147,8 +147,19 @@
 
 	}
 
-	function degrees2miles($lat, $long, $diff)
+	function miles2degrees($lat, $long, $diff)
 	{
+		//Here's where I got these formulas: https://www.movable-type.co.uk/scripts/latlong.html
+		//The angle being traversed as a fraction of the earth's surface
+		$c = $diff/3963.17;
 
+		//Check the website formula. This appears to turn the area traversed into radians
+		$a = pow(tan((1/2)*$c),2)/(1-pow(tan((1/2)*$c),2));
+
+		//This turns the the area traversed into delta lat and delta long
+		//Please note that I'm approximating lat2 (destination) as lat1, because the difference is so small
+		$long = 2*asin(sqrt($a/(pow(cos(deg2rad($lat)),2))));
+		$lat = 2*asin(sqrt($a));
+		return array($long, $lat);
 	}
 ?>
