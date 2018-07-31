@@ -130,14 +130,19 @@
 		}
 		return get_user($pdo);
 	}
+
 	function string2arr($arr)
 	{
 		$output = array();
 		$array = explode(",",$arr);
 		foreach($array as $it)
 		{
-			list($key, $value) = explode("=>", $it);
-			$output[$key] = $value;
+			//Makes sure the value has a size
+			if(strlen(substr($it,strpos($it, ">")))>1)
+			{
+				list($key, $value) = explode("=>", $it);
+				$output[trim($key)] = trim($value);
+			}
 		}
 		return $output;
 	}
