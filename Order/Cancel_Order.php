@@ -11,6 +11,7 @@
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
+    done($response);
   }
   if(empty($result))
   {
@@ -30,6 +31,7 @@
     ));
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
+    done($response);
   }
   $response['success'] = "success";
   done($response);

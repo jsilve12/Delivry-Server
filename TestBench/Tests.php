@@ -22,7 +22,7 @@
     $Order_Tb->build_test('Accept', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Amend', array('email', 'password', 'order_id', 'items', 'address', 'addr_description', 'long', 'lat', 'store' ));
     $Order_Tb->build_test('Cancel_Accept', array('email', 'password', 'order_id'));
-    $Order_Tb->build_test('Cancel_Placed', array('email', 'password', 'order_id'));
+    $Order_Tb->build_test('Cancel_Order', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'receipt_name', 'receipt'));
 
     echo("</br>");
