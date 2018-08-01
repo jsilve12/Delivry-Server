@@ -125,11 +125,12 @@
       }
 
       //Enters the ones that remain back in
-      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(:oi, :de, :ii)");
+      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id, price) VALUES(:oi, :de, :ii, :p)");
       $stmt->execute(array(
         ":oi" => $_POST['order_id'],
-        ":de" => $value,
-        ":ii" => $item_id
+        ":de" => $value[0],
+        ":ii" => $item_id,
+        ":p" => $value[1]
       ));
     } catch (\Exception $e) {
       $response['error'] = "SQL error";
