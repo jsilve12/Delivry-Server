@@ -45,6 +45,7 @@ CREATE TABLE Locations(
 CREATE TABLE stores_item(
 	store_id INTEGER,
 	item_id INTEGER,
+	cumulative_price DOUBLE,
 	count INTEGER,
 	time TIMESTAMP,
 	CONSTRAINT stores_item_ibfk_1
@@ -98,6 +99,7 @@ CREATE TABLE Items_Placed(
 	order_id INTEGER,
 	description VARCHAR(255),
 	item_id INTEGER,
+	price DOUBLE,
 	CONSTRAINT items_placed_ibfk_1
 		FOREIGN KEY (order_id)
 		REFERENCES Order_Placed(order_id)
@@ -137,6 +139,7 @@ CREATE TABLE Items_Accepted(
 	order_id INTEGER,
 	description VARCHAR(255),
 	item_id INTEGER,
+	price DOUBlE,
 	CONSTRAINT items_accepted_ibfk_1
 		FOREIGN KEY (order_id)
 		REFERENCES Order_Accepted(order_id)
@@ -178,6 +181,7 @@ CREATE TABLE Items_Finished(
 	order_id INTEGER,
 	description VARCHAR(255),
 	item_id INTEGER,
+	price DOUBLE,
 	CONSTRAINT items_finished_ibfk_1
 		FOREIGN KEY (order_id)
 		REFERENCES Order_Finished(order_id)
@@ -220,6 +224,7 @@ CREATE TABLE Items_Conflict(
 	order_id INTEGER,
 	description VARCHAR(255),
 	item_id INTEGER,
+	price DOUBLE,
 	CONSTRAINT items_Conflict_ibfk_1
 		FOREIGN KEY (order_id)
 		REFERENCES Order_Conflict(order_id)
