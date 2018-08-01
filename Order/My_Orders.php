@@ -7,7 +7,7 @@
   //Yes I know theres a lot of repitiion, and this file will be re-written (JS 7-2018)
   //Orders Placed
   try {
-    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description FROM Order_Placed AS p JOIN Items_Placed AS ip ON p.order_id = ip.order_id JOIN Items AS i ON i.item_id = ip.item_id WHERE p.placed_by = :pb");
+    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, ip.price FROM Order_Placed AS p JOIN Items_Placed AS ip ON p.order_id = ip.order_id JOIN Items AS i ON i.item_id = ip.item_id WHERE p.placed_by = :pb");
     $stmt->execute(array(
       ":pb" => $user[0]['people_id']
     ));
@@ -19,7 +19,7 @@
 
   //Orders Accepted (Either the placer or deliverer)
   try {
-    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by FROM Order_Accepted AS p JOIN Items_Accepted AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
+    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by, ip.price FROM Order_Accepted AS p JOIN Items_Accepted AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
     $stmt->execute(array(
       ":pb" =>$user[0]['people_id']
     ));
@@ -30,7 +30,7 @@
 
   //Orders Finished (Either the placer or deliverer)
   try {
-    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by, p.price FROM Order_Finished AS p JOIN Items_Finished AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
+    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by, p.price, ip.price FROM Order_Finished AS p JOIN Items_Finished AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
     $stmt->execute(array(
       ":pb" =>$user[0]['people_id']
     ));
@@ -41,7 +41,7 @@
 
   //Conflicts (Either the placer or deliverer)
   try {
-    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by,p.price,p.comments FROM Order_Conflict AS p JOIN Items_Conflict AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
+    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by,p.price,p.comments, ip.price FROM Order_Conflict AS p JOIN Items_Conflict AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
     $stmt->execute(array(
       ":pb" =>$user[0]['people_id']
     ));
