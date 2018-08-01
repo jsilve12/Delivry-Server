@@ -16,7 +16,7 @@
 		done($response);
 	}
 	else {
-		$_POST['items'] = string2arr($_POST['items']);
+		$_POST['items'] = string2arr($_POST['items'], true);
 	}
 
 	//Creates the Order Placed entry
@@ -113,15 +113,16 @@
 
 				//Deals with the table that tracks how many times an item is purchased at a store
 				//Adds a Row
-					$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id) VALUES(:si , :ii)");
+					$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, price) VALUES(:si , :ii, :cp)");
 					$stmt->execute(array(
 						":si" => $store_id,
-						":ii" => $item_id
+						":ii" => $item_id,
+						":cp" => $value[1]
 					));
 				//Connects the item to the order
 				$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(".$order_id.", :desc, ".$item_id.")");
 				$stmt->execute(array(
-					":desc" => $value
+					":desc" => $value[0]
 				));
 			}
 		} catch (\Exception $e) {

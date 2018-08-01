@@ -45,8 +45,7 @@ CREATE TABLE Locations(
 CREATE TABLE stores_item(
 	store_id INTEGER,
 	item_id INTEGER,
-	cumulative_price DOUBLE,
-	count INTEGER,
+	price DOUBLE,
 	time TIMESTAMP,
 	CONSTRAINT stores_item_ibfk_1
 		FOREIGN KEY(store_id)

@@ -62,7 +62,7 @@
     //If you changing an item send in a key => value array with the name => description, and send in all items that are remaining
     if($key == "items")
     {
-      $items = string2arr($value);
+      $items = string2arr($value, true);
     }
     else if(strlen($value) == 0)
     {
