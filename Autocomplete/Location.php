@@ -9,8 +9,8 @@
       ":id" => $person[0]["people_id"],
       ":it" => "%".$_POST['address']."%"
     ));
-    $response = $stmt->FetchAll(PDO::FETCH_ASSOC);
-    if(empty($response))
+    $response['results'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
+    if(empty($response['results']))
     {
       //Make this a function later because it's in price too
       $tab_name = array("Order_Placed", "Order_Accepted", "Order_Finished", "Order_Conflict");
@@ -24,12 +24,12 @@
         $stmt .= "SELECT address, COUNT(address) FROM ".$value."WHERE address like %:it% "
       }
       $stmt .= ") ORDER BY COUNT(address)";
+      $stmt1 = $pdo->prepare($stmt);
+      $stmt1->execute(array(
+        ":it" => $_POST['address']
+      ));
+      $response['results'] = array_slice($stmt1->FetchAll(PDO::FETCH_ASSOC), 0, $_POST['num_results'])
     }
-    $stmt1 = $pdo->prepare($stmt);
-    $stmt1->execute(array(
-      ":it" => $_POST['address']
-    ));
-    $response['results'] = array_slice($stmt1->FetchAll(PDO::FETCH_ASSOC), 0, $_POST['num_results'])
   } catch (\Exception $e) {
     $response['error'] = "SQL Error";
   }
