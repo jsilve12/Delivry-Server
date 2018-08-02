@@ -59,11 +59,12 @@
     {
       try {
         //Enters each item back into the database
-        $stmt = $pdo->prepare("INSERT INTO Items_Finished(order_id, description, item_id) VALUES(:oi, :de, :ii)");
+        $stmt = $pdo->prepare("INSERT INTO Items_Finished(order_id, description, item_id, price) VALUES(:oi, :de, :ii, :p)");
         $stmt->execute(array(
           ":oi" => $id,
           ":de" => $value['description'],
-          ":ii" => $value['item_id']
+          ":ii" => $value['item_id'],
+          ":p" => $value['price']
         ));
       } catch (\Exception $e) {
         $response['error'] = "SQL error";
