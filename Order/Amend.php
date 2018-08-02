@@ -81,7 +81,7 @@
     //Executes the sql that was prepared above
     $sql_stmt .= " WHERE order_id = ".$_POST['order_id'];
     $stmt = $pdo->prepare($sql_stmt);
-    $stmt->execute(string2arr($changes));
+    $stmt->execute(string2arr($changes, false));
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
     done($response);
@@ -98,7 +98,6 @@
   }
   foreach($items as $key => $value)
   {
-    echo($key.$value);
     //Gets the id of the items (TODO:This could be a function, because this code is from Place)
     try {
       //Retrieves the item name from the database
