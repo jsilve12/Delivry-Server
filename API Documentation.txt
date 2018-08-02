@@ -99,5 +99,5 @@ Order
 		Errors: "Longitude or Latitude are missing", "SQL error"
 
 
-TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, accept projected prices from users,Autofill price, Consolidate the locations into a separate table
+TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, Consolidate the locations into a separate table
 TODO: OOO related stuff-DB class, class that moves orders from one database to, Auto-fill class

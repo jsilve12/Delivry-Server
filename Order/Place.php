@@ -113,16 +113,17 @@
 
 				//Deals with the table that tracks how many times an item is purchased at a store
 				//Adds a Row
-					$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, price) VALUES(:si , :ii, :cp)");
-					$stmt->execute(array(
-						":si" => $store_id,
-						":ii" => $item_id,
-						":cp" => $value[1]
-					));
-				//Connects the item to the order
-				$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(".$order_id.", :desc, ".$item_id.")");
+				$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, price) VALUES(:si , :ii, :cp)");
 				$stmt->execute(array(
-					":desc" => $value[0]
+					":si" => $store_id,
+					":ii" => $item_id,
+					":cp" => $value[1]
+				));
+				//Connects the item to the order
+				$stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id, price) VALUES(".$order_id.", :desc, ".$item_id.",:price)");
+				$stmt->execute(array(
+					":desc" => $value[0],
+					":price" => $value[1]
 				));
 			}
 		} catch (\Exception $e) {
