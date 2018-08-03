@@ -30,7 +30,7 @@
     $Auto_Tb->build_test('Item', array('email', 'password', 'item', 'num_results'));
     $Auto_Tb->build_test('Store', array('email', 'password', 'name', 'num_results'));
     $Auto_Tb->build_test('Location', array('email', 'password', 'name', 'num_results'));
-    $Auto_Tb->build_test('Price', array('email', 'password', 'price'));
+    $Auto_Tb->build_test('Price', array('email', 'password', 'item', 'store'));
   ?>
 </body>
 </html>
