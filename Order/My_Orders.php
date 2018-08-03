@@ -50,4 +50,16 @@
     $response['error'] = "Error with fetching the orders conflicts";
   }
   done($response);
+
+  //Verified (Either the placer or deliverer)
+  try {
+    $stmt = $pdo->prepare("SELECT p.order_id, p.address, p.addr_description, p.store, i.name, ip.description, p.accepted_by,p.price, ip.price FROM Order_Verified AS p JOIN Items_Verified AS ip ON p.order_id = ip.order_id JOIN Items AS i on i.item_id = ip.item_id WHERE p.placed_by = :pb OR p.accepted_by = :pb");
+    $stmt->execute(array(
+      ":pb" =>$user[0]['people_id']
+    ));
+    $response['Conflict Orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
+  } catch (\Exception $e) {
+    $response['error'] = "Error with fetching the orders Verified";
+  }
+  done($response);
 ?>

@@ -41,7 +41,7 @@
 
   //Finds the items in the database
   try{
-    $stmt = $pdo->prepare("SELECT * FROM Items_Verified WHERE order_id = ".$_POST['order_id']);
+    $stmt = $pdo->prepare("SELECT * FROM Items_Finished WHERE order_id = ".$_POST['order_id']);
     $stmt->execute();
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
     if(empty($result))

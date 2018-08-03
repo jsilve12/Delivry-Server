@@ -85,7 +85,7 @@ Order
 		Requires: email, password (salted and hashed), people_id
 		Returns: success
 		Effects: Returns all of a persons orders
-		Errors: "Error with fetching the orders placed", "Error with fetching the orders accepted", "Error with fetching the orders finished", "Error with fetching the orders conflicts"
+		Errors: "Error with fetching the orders placed", "Error with fetching the orders accepted", "Error with fetching the orders finished", "Error with fetching the orders conflicts", "Error with fetching the orders Verified"
 
 	Place.php
 		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions.price, however enter it as a string Ex: Pear=>round.price,Apple=>square.price), address, addr_desc (address description), long, lat, store
@@ -99,6 +99,12 @@ Order
 		Effects: Returns all the orders that placed in a certain area, with an optional filter to limit the responses to a certain store.
 		Errors: "Longitude or Latitude are missing", "SQL error"
 
+	Verify.php
+		NOTE: Order must be in finished
+		Requires:email, password (salted and hashed), order_id
+		Returns: Message saying success
+		Effects: Moves an order from the completed to verified TABLE
+		Errors: "Order not found", "SQL error"
 
 TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, Consolidate the locations into a separate table
 TODO: OOO related stuff-DB class, class that moves orders from one database to, Auto-fill class

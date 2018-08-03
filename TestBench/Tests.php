@@ -24,13 +24,16 @@
     $Order_Tb->build_test('Cancel_Accept', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Cancel_Order', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'receipt_name', 'receipt'));
+    $Order_Tb->build_test('Verify', array('email', 'password', 'order_id'));
+    $Order_Tb->build_test('File_Complaint', array('email', 'password', 'order_id', 'Complaint'));
+    $Order_Tb->build_test('Resolve_Complaint', array('email', 'password', 'order_id'));
 
     echo("</br>");
     $Auto_Tb = new TestBench("Autocomplete");
     $Auto_Tb->build_test('Item', array('email', 'password', 'item', 'num_results'));
     $Auto_Tb->build_test('Store', array('email', 'password', 'name', 'num_results'));
-    $Auto_Tb->build_test('Location', array('email', 'password', 'name', 'num_results'));
     $Auto_Tb->build_test('Price', array('email', 'password', 'item', 'store'));
+    $Auto_Tb->build_test('Location', array('email', 'password', 'name'));
   ?>
 </body>
 </html>
