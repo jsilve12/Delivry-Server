@@ -75,10 +75,11 @@ Order
 
 	Finish.php
 		NOTE: Only doable when in the Accepted category
-		Requires: email, password (salted and hashed), order_id, price, receipt_name (the filename of the receipt), receipt (this will be an image of the receipt)
+		NOTE: File must be submitted using File not Post. Also please use long, random names for the image, so there are no duplicates
+		Requires: email, password (salted and hashed), order_id, price (the filename of the receipt), receipt (this will be an image of the receipt)
 		Returns: success
 		Effects: Moves the order to Finished
-		Errors: "SQL error", "Order  not found"
+		Errors: "SQL error", "Order  not found", "Image Missing", "Invalid File Extension", "File name already in use", "Error uploading the file"
 
 	My_Orders.php
 		Requires: email, password (salted and hashed), people_id

@@ -25,7 +25,7 @@
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
-      ":re" => $_POST["receipt_name"],
+      ":re" => $_FILES['image']['name'],
       ":pr" => strtolower(trim($_POST['price'])),
       ":ad" => $result[0]["address"],
       ":ad_de" => $result[0]["addr_description"],
@@ -74,6 +74,37 @@
     //Deletes everything
     $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id= ".$_POST['order_id']);
     $stmt->execute();
+
+    //Handles inputing the image
+    if(!isset($_FILES['image']))
+    {
+      $response['error'] = "Image Missing";
+      done($response);
+    }
+    $target = "../Receipts/".basename($_FILES['image']['name']);
+
+    //Checks that the extension is appropriate
+    $ext = strtolower(pathinfo($target, PATHINFO_EXTENSION));
+    if($ext != "jpg" && $ext != "png" && $ext != "jpeg" && $ext != "gif")
+    {
+      $response['error'] = "Invalid file extension";
+      done($response);
+    }
+
+    //Makes sure the name is distinct
+    if(file_exists($target))
+    {
+      $response['error'] = "File name in use";
+      done($response);
+    }
+
+    //Moves the file to the Appropriate folder
+    try {
+      move_uploaded_file($_FILES['image']['tmp_name'], $target);
+    } catch (\Exception $e) {
+      $response['error'] = "Error Uploading the file"
+    }
+
   $response['success'] = "success";
   done($response);
 ?>
