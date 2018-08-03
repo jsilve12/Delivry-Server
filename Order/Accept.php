@@ -14,7 +14,7 @@
 	try
 	{
 		//Pulls the order from the database
-		$stmt = $pdo->prepare("SELECT p.order_id, p.placed_by, p.address, p.addr_description, p.longitude, p.latitude, p.store, i.description, i.order_id, i.item_id FROM Order_Placed AS p INNER JOIN Items_Placed AS i ON p.order_id=i.order_id WHERE p.order_id = :ID");
+		$stmt = $pdo->prepare("SELECT p.order_id, p.placed_by, p.address, p.addr_description, p.longitude, p.latitude, p.store, i.description, i.order_id, i.item_id, i.price FROM Order_Placed AS p INNER JOIN Items_Placed AS i ON p.order_id=i.order_id WHERE p.order_id = :ID");
 		$stmt->execute(array(
 			":ID" => $_POST['order_id']
 		));
@@ -59,11 +59,12 @@
 			if($value["order_id"] != $_POST['order_id']) continue;
 
 			//Enters it into the Items Accepted database
-			$stmt = $pdo->prepare("INSERT INTO Items_Accepted(order_id, description, item_id) VALUES(:oi, :de, :ii)");
+			$stmt = $pdo->prepare("INSERT INTO Items_Accepted(order_id, description, item_id, price) VALUES(:oi, :de, :ii, :p)");
 			$stmt->execute(array(
 				":oi" => $ID,
 				":de" => $value['description'],
-				":ii" => $value['item_id']
+				":ii" => $value['item_id'],
+				":p" => $value['price']
 			));
 		}
 

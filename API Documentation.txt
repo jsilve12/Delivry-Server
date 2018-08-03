@@ -87,7 +87,7 @@ Order
 		Errors: "Error with fetching the orders placed", "Error with fetching the orders accepted", "Error with fetching the orders finished", "Error with fetching the orders conflicts"
 
 	Place.php
-		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions, however enter it as a string Ex: Pear=>round,Apple=>square), address, addr_desc (address description), long, lat, store
+		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions.price, however enter it as a string Ex: Pear=>round.price,Apple=>square.price), address, addr_desc (address description), long, lat, store
 		Returns: success
 		Effects: Enters a new entry into the database
 		Errors: "Missing a variable", "SQL error (1-5)", "Items isn't an array"
@@ -99,5 +99,5 @@ Order
 		Errors: "Longitude or Latitude are missing", "SQL error"
 
 
-TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, accept projected prices from users, Autofill location, Autofill price
-TODO: OOO related stuff-DB class, class that moves orders from one database to another
+TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, Consolidate the locations into a separate table
+TODO: OOO related stuff-DB class, class that moves orders from one database to, Auto-fill class

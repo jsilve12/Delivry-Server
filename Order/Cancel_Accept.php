@@ -36,11 +36,12 @@
     $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
     foreach($result as $key => $value)
     {
-      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, item_id, description) VALUES(:oi, :ii, :de)");
+      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, item_id, description, price) VALUES(:oi, :ii, :de, :p)");
       $stmt->execute(array(
         ":oi" => $id,
         ":ii" => $value['item_id'],
-        ":de" => $value['description']
+        ":de" => $value['description'],
+        ":p" => $value['price']
       ));
     }
     //Deletes the order from Order_Accepted

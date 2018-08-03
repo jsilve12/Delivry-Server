@@ -131,7 +131,7 @@
 		return get_user($pdo);
 	}
 
-	function string2arr($arr)
+	function string2arr($arr, $is_items)
 	{
 		$output = array();
 		$array = explode(",",$arr);
@@ -141,7 +141,14 @@
 			if(strlen(substr($it,strpos($it, ">")))>1)
 			{
 				list($key, $value) = explode("=>", $it);
-				$output[trim($key)] = trim($value);
+				if(!$is_items)
+				{
+					$output[trim($key)] = trim($value);
+				}
+				if($is_items)
+				{
+					$output[trim($key)] = explode(".", $value);
+				}
 			}
 		}
 		return $output;

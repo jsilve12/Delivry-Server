@@ -62,7 +62,7 @@
     //If you changing an item send in a key => value array with the name => description, and send in all items that are remaining
     if($key == "items")
     {
-      $items = string2arr($value);
+      $items = string2arr($value, true);
     }
     else if(strlen($value) == 0)
     {
@@ -81,7 +81,7 @@
     //Executes the sql that was prepared above
     $sql_stmt .= " WHERE order_id = ".$_POST['order_id'];
     $stmt = $pdo->prepare($sql_stmt);
-    $stmt->execute(string2arr($changes));
+    $stmt->execute(string2arr($changes, false));
   } catch (\Exception $e) {
     $response['error'] = "SQL error";
     done($response);
@@ -98,7 +98,6 @@
   }
   foreach($items as $key => $value)
   {
-    echo($key.$value);
     //Gets the id of the items (TODO:This could be a function, because this code is from Place)
     try {
       //Retrieves the item name from the database
@@ -125,11 +124,12 @@
       }
 
       //Enters the ones that remain back in
-      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id) VALUES(:oi, :de, :ii)");
+      $stmt = $pdo->prepare("INSERT INTO Items_Placed(order_id, description, item_id, price) VALUES(:oi, :de, :ii, :p)");
       $stmt->execute(array(
         ":oi" => $_POST['order_id'],
-        ":de" => $value,
-        ":ii" => $item_id
+        ":de" => $value[0],
+        ":ii" => $item_id,
+        ":p" => $value[1]
       ));
     } catch (\Exception $e) {
       $response['error'] = "SQL error";
