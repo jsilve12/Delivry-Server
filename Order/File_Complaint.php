@@ -21,7 +21,7 @@
 
   //Adds the entry into the new table
   try {
-    $stmt = $pdo->prepare("INSERT INTO Order_Verified(placed_by, accepted_by, receipt, price, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:re,:pr,:ad,:ad_de,:lo,:la,:st)");
+    $stmt = $pdo->prepare("INSERT INTO Order_Conflict(placed_by, accepted_by, receipt, price, address, addr_description, longitude, latitude, store, comments) VALUES(:pb,:ab,:re,:pr,:ad,:ad_de,:lo,:la,:st, :co)");
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
@@ -31,7 +31,8 @@
       ":ad_de" => $result[0]["addr_description"],
       ":lo" => $result[0]["longitude"],
       ":la" => $result[0]["latitude"],
-      ":st" => $result[0]["store"]
+      ":st" => $result[0]["store"],
+      ":co" => $_POST['comments']
     ));
     $id = $pdo->LastInsertId();
   } catch (\Exception $e) {
@@ -59,7 +60,7 @@
     {
       try {
         //Enters each item back into the database
-        $stmt = $pdo->prepare("INSERT INTO Items_Verified(order_id, description, item_id, price) VALUES(:oi, :de, :ii, :p)");
+        $stmt = $pdo->prepare("INSERT INTO Items_Conflict(order_id, description, item_id, price) VALUES(:oi, :de, :ii, :p)");
         $stmt->execute(array(
           ":oi" => $id,
           ":de" => $value['description'],
@@ -74,6 +75,6 @@
     //Deletes everything
     $stmt = $pdo->prepare("DELETE FROM Order_Finished WHERE order_id= ".$_POST['order_id']);
     $stmt->execute();
-  $response['success'] = "success";
-  done($response);
+    $response['success'] = "success";
+    done($response);
 ?>

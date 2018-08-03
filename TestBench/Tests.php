@@ -25,7 +25,7 @@
     $Order_Tb->build_test('Cancel_Order', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'receipt_name', 'receipt'));
     $Order_Tb->build_test('Verify', array('email', 'password', 'order_id'));
-    $Order_Tb->build_test('File_Complaint', array('email', 'password', 'order_id', 'Complaint'));
+    $Order_Tb->build_test('File_Complaint', array('email', 'password', 'order_id', 'comments'));
     $Order_Tb->build_test('Resolve_Complaint', array('email', 'password', 'order_id'));
 
     echo("</br>");
