@@ -1,4 +1,6 @@
 <?php
+  require_once("Functions.php");
+  start($pdo);
 
 ?>
 <script type="text/javascript" src="https://js.squareup.com/v2/paymentform">
@@ -55,13 +57,11 @@
             console.log("Encountered errors:");
             errors.forEach(function(error) {
               console.log('  ' + error.message);
-            });[
+            });
 
             return;
           }
-
           alert('Nonce received: ' + nonce); /* FOR TESTING ONLY */
-
           // Send the nonce to a page that enters it into the database
           $.ajax({
             type: 'post',
@@ -69,13 +69,11 @@
             datatype: 'json',
             data: JSON.stringify({
               'nonce':nonce,
-              'order_id':<?=$_POST['order_id'] ?>,
-              'person':<?=$_POST['person'] ?>
+              'order_id':<?=$_POST['people_id'] ?>
             }),
             success:function(data)
             {
-              console.log('succeeded');
-              $('#".$page."').text('The Result is ' + data.toString());
+              console.log('succeeded in sending info to Store');
             }
           })
         }
