@@ -11,8 +11,21 @@ Autocomplete
 
 	Store.php
 		Requires: email, password (Must be salted and hashed), name (partial or full store name), num_results (number of results wanted)
+		Effects: Finds store names that match the partially entered string
 		Returns: Autofill results for store based on the current input
 		Errors: "SQL Error"
+
+	Location.php
+		Requires: email, password (Must be salted and hashed), name
+		Effects: Finds previously used addresses for that user that match the listed address
+		Returns: Autofill results for store based on the current input
+		Errors: "SQL Error"
+
+	Price.php
+		Requires: email, password (Must be salted and hashed), store, item
+		Returns: Avg price of that object at that store
+		Effects: Returns the average price of that object at that store.
+		Errors: "SQL error"
 
 Login
 	Address.php
@@ -73,25 +86,53 @@ Order
 		Effects: Deletes the entry
 		Errors: "SQL error", "That entry doesn't exist"
 
+	File_Complaint:
+		NOTE: order must be in finished
+		Requires: email, password (salted and hashed), order_id, comments (reason for complaint)
+		Returns: success
+		Effects: Moves the order from finished to conflict
+		Errors: "SQL error", "Order not found"
+
 	Finish.php
 		NOTE: Only doable when in the Accepted category
 		NOTE: File must be submitted using File not Post. Also please use long, random names for the image, so there are no duplicates
-		Requires: email, password (salted and hashed), order_id, price (the filename of the receipt), receipt (this will be an image of the receipt)
+		Requires: email, password (salted and hashed), order_id, price (the filename of the receipt)
 		Returns: success
 		Effects: Moves the order to Finished
-		Errors: "SQL error", "Order  not found", "Image Missing", "Invalid File Extension", "File name already in use", "Error uploading the file"
+		Errors: "SQL error", "Order  not found"
 
 	My_Orders.php
 		Requires: email, password (salted and hashed), people_id
 		Returns: success
 		Effects: Returns all of a persons orders
 		Errors: "Error with fetching the orders placed", "Error with fetching the orders accepted", "Error with fetching the orders finished", "Error with fetching the orders conflicts", "Error with fetching the orders Verified"
+	TODO: Associate orders with database
 
 	Place.php
 		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions.price, however enter it as a string Ex: Pear=>round.price,Apple=>square.price), address, addr_desc (address description), long, lat, store
 		Returns: success
 		Effects: Enters a new entry into the database
 		Errors: "Missing a variable", "SQL error (1-5)", "Items isn't an array"
+
+	Price.php
+		NOTE: The order should be in accepted (shouldn't have been finalized), because this is the price that gets sent to the server
+		Requires: email, password (salted and hashed), order_id, distance, price (receipt price)
+		Returns: the price
+		Effects: Produces the total price the user will pay
+		Errors: "Order doesn't exist", "SQL error"
+
+	Receipt.php
+		NOTE: The order name matches the name just submitted
+		Requires: image (this will be an image of the receipt)
+		Returns: success
+		Effects: Adds an image of the receipt to the server for verification
+		Errors: "Image Missing", "Invalid File Extension", "File name already in use", "Error uploading the file"
+
+	Resolve_Complaint:
+		Requires: email, password (salted and hashed), order_id (should be in the conflicts database)
+		Returns: success
+		Effects: Moves the entry from conflict to Finished
+		Errors: "Order not found", "SQL error"
 
 	Standing.php
 		Requires: email, password (salted and hashed), long, lat, diff (total distance range you want included), (optional) store
@@ -105,6 +146,27 @@ Order
 		Returns: Message saying success
 		Effects: Moves an order from the completed to verified TABLE
 		Errors: "Order not found", "SQL error"
+
+Payment
+	Create.php
+		Requires: email, password (salted and hashed), card_number, cvv, expiration_date, zip_code
+		Returns: Message saying success
+		Effects: Creates an instance of each persons credit card
+		Errors: Variety-received from the square server
+
+	Place:
+		NOTE: order_id references an object in Finish.php, and each individual to have a nonce of their card
+		Requires: email, password (salted and hashed), order_id
+		Returns: Message saying success
+		Effects: Processes the transaction
+		Errors: Variety-received from the square server
+
+	Refund:
+		NOTE: order_id references an object in Conflict.php, and each individual must have a nonce of their card
+		Requires: email, password (salted and hashed), order_id
+		Returns: Message saying success
+		Effects: Refunds the transaction
+		Errors: Variety-received from the square server
 
 TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, Consolidate the locations into a separate table
 TODO: OOO related stuff-DB class, class that moves orders from one database to, Auto-fill class
