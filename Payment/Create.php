@@ -1,7 +1,7 @@
 <?php
-  require_once("Functions.php");
-  start($pdo);
-
+  //Implement better error displaying
+  require_once("../Order/Functions.php");
+  $user = start($pdo);
 ?>
 <script type="text/javascript" src="https://js.squareup.com/v2/paymentform">
   $(document).ready(function(event){
@@ -69,7 +69,7 @@
             datatype: 'json',
             data: JSON.stringify({
               'nonce':nonce,
-              'order_id':<?=$_POST['people_id'] ?>
+              'order_id':<?=$user[0]['people_id'] ?>
             }),
             success:function(data)
             {
