@@ -109,5 +109,7 @@
       "transfer_group" => $id,
     ));
   $response['success'] = "success";
+  $response['charge'] = $charge;
+  $response['payment'] = $transfer;
   done($response);
 ?>

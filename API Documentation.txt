@@ -70,7 +70,7 @@ Order
 		Requires: email, password (salted and hashed), order_id
 		Returns: Message saying success
 		Effects: Accepts an order with order id order_id on behalf of the current user.
-		Errors:	"Order id not found", "SQL error", "Result set from database is empty"
+		Errors:	"Order id not found", "SQL error", "Result set from database is empty", "Person doesn't have payment information"
 
 	Amend.php
 		NOTE: calling this function deletes all the items stored in the database. The items must be re-entered
@@ -104,7 +104,7 @@ Order
 		NOTE: Only doable when in the Accepted category
 		NOTE: File must be submitted using File not Post. Also please use long, random names for the image, so there are no duplicates
 		Requires: email, password (salted and hashed), order_id, price, distance
-		Returns: success
+		Returns: success and the result of the charge (array object charge) and the transfer (array object transfer)
 		Effects: Moves the order to Finished
 		Errors: "SQL error", "Order  not found"
 
@@ -119,7 +119,7 @@ Order
 		Requires: email, password (salted and hashed), items (should be a key value array of names => descriptions.price, however enter it as a string Ex: Pear=>round.price,Apple=>square.price), address, addr_desc (address description), long, lat, store
 		Returns: success
 		Effects: Enters a new entry into the database
-		Errors: "Missing a variable", "SQL error (1-5)", "Items isn't an array"
+		Errors: "Missing a variable", "SQL error (1-5)", "Items isn't an array", "Person doesn't have payment information"
 
 	Price.php
 		NOTE: The order should be in accepted (shouldn't have been finalized), because this is the price that gets sent to the server

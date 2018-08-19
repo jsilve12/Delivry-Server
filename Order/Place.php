@@ -3,6 +3,17 @@
 	$user = get_user($pdo);
 	start($pdo);
 
+	//Makes sure the user has an associated card
+	try{
+		$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']);
+		$stmt->execute();
+		if(empty($stmt))
+		{
+			$response['error'] = "Person doesn't have payment information";
+			done($response);
+		}
+	}
+
 	//Verifies the required input is available
 	if(!(isset($_POST['items']) && isset($_POST['address']) && isset($_POST['addr_desc']) && isset($_POST['long']) && isset($_POST['lat']) && isset($_POST['store'])))
 	{
