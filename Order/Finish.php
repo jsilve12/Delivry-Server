@@ -19,6 +19,16 @@
   }
   $id;
 
+  //Computes the price that the driver gets paid
+  $driver_pay = 0;
+  if((double)$_POST['price'] < 10)
+  {
+    $driver_pay = ((double) $_POST['price'])*1.25 + distance*0.8;
+  }
+  else {
+    $driver_pay = (((double) $_POST['price'])-10)*1.20+2.5+distance*0.8;
+  }
+
   //Adds the entry into the new table
   try {
     $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, receipt, price, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:re,:pr,:ad,:ad_de,:lo,:la,:st)");
@@ -76,7 +86,28 @@
     $stmt->execute();
 
     //Processes the transaction
-    
+
+    //Gets the users
+    $paying = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["placed_by"]);
+    $paying->execute();
+
+    $paid = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["accepted_by"]);
+    $paid->execute();
+
+    //Pings the payment servers
+    $charge = \Stripe\Charge::create(array(
+      "amount" => 1.1*$driver_pay,
+      "currency" => "usd",
+      "source" => $paying[0]['payment'],
+      "transfer_group" => $id,
+    ));
+
+    $transfer = \Stripe\Transfer::create(array(
+      "amount" => $driver_pay,
+      "currency" => "usd",
+      "destination" => $paid[0]['payment'],
+      "transfer_group" => $id,
+    ));
   $response['success'] = "success";
   done($response);
 ?>

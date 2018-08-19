@@ -8,6 +8,7 @@ CREATE TABLE People(
 	longitude DOUBLE,
 	latitude DOUBLE,
 	rating DOUBLE,
+	payment VARCHAR(255),
     PRIMARY KEY(people_id),
 	UNIQUE(name, email, password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -188,16 +189,6 @@ CREATE TABLE Items_Finished(
 	CONSTRAINT items_finished_ibfk_2
 		FOREIGN KEY (item_id)
 		REFERENCES Items (item_id)
-		ON DELETE CASCADE ON UPDATE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE payment_nonces(
-	nonce VARCHAR(255),
-	people_id INTEGER,
-	time TIMESTAMP,
-	CONSTRAINT payment_nonces_ibfk_1
-		FOREIGN KEY (people_id)
-		REFERENCES People (people_id)
 		ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
