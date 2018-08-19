@@ -147,26 +147,5 @@ Order
 		Effects: Moves an order from the completed to verified TABLE
 		Errors: "Order not found", "SQL error"
 
-Payment
-	Create.php
-		Requires: email, password (salted and hashed), card_number, cvv, expiration_date, zip_code
-		Returns: Message saying success
-		Effects: Creates an instance of each persons credit card
-		Errors: Variety-received from the square server
-
-	Place:
-		NOTE: order_id references an object in Finish.php, and each individual to have a nonce of their card
-		Requires: email, password (salted and hashed), order_id
-		Returns: Message saying success
-		Effects: Processes the transaction
-		Errors: Variety-received from the square server
-
-	Refund:
-		NOTE: order_id references an object in Conflict.php, and each individual must have a nonce of their card
-		Requires: email, password (salted and hashed), order_id
-		Returns: Message saying success
-		Effects: Refunds the transaction
-		Errors: Variety-received from the square server
-
 TODO: Delete account, file complaint, verify order received, send emails, send/receive payment, enter order receipt into database, Consolidate the locations into a separate table
 TODO: OOO related stuff-DB class, class that moves orders from one database to, Auto-fill class

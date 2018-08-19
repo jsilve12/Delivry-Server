@@ -75,6 +75,8 @@
     $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id= ".$_POST['order_id']);
     $stmt->execute();
 
+    //Processes the transaction
+    
   $response['success'] = "success";
   done($response);
 ?>
