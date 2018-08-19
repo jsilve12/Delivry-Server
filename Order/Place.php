@@ -4,19 +4,19 @@
 	start($pdo);
 
 	//Makes sure the user has an associated card
-	// try{
-	// 	$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']."IS NOT NULL");
-	// 	$stmt->execute();
-	// 	if(empty($stmt) || $s)
-	// 	{
-	// 		$response['error'] = "Person doesn't have payment information";
-	// 		done($response);
-	// 	}
-	// }
-	// catch{
-	// 	$response['error'] = "SQL error 1";
-	// 	done($response);
-	// }
+	try{
+		$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']."IS NOT NULL");
+		$stmt->execute();
+		if(empty($stmt) || $s)
+		{
+			$response['error'] = "Person doesn't have payment information";
+			done($response);
+		}
+	}
+	catch{
+		$response['error'] = "SQL error 1";
+		done($response);
+	}
 
 	//Verifies the required input is available
 	if(!(isset($_POST['items']) && isset($_POST['address']) && isset($_POST['addr_desc']) && isset($_POST['long']) && isset($_POST['lat']) && isset($_POST['store'])))
@@ -98,7 +98,7 @@
 			//Enters in each item
 			foreach($_POST['items'] as $key => $value)
 			{
-				//Retrieves the item name from the database
+				//Retrieves the itezm name from the database
 				$stmt = $pdo->prepare("SELECT * FROM Items WHERE name = :na");
 				$stmt->execute(array(
 					":na" => $key
