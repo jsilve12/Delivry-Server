@@ -11,6 +11,7 @@
     $Login_Tb->build_test('Create', array('name', 'email', 'salt', 'password'));
     $Login_Tb->build_test('Login', array('email', 'password'));
     $Login_Tb->build_test('Address', array('email', 'password', 'address', 'longitude', 'latitude'));
+    $Login_Tb->build_test('Payment', array('email', 'password', 'payment'));
     $Login_Tb->build_test('Reset_Ask', array('email'));
     $Login_Tb->build_test('Reset_Grant', array('email','temp_pass','password'));
     echo("</br>");
@@ -23,7 +24,7 @@
     $Order_Tb->build_test('Amend', array('email', 'password', 'order_id', 'items', 'address', 'addr_description', 'long', 'lat', 'store' ));
     $Order_Tb->build_test('Cancel_Accept', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Cancel_Order', array('email', 'password', 'order_id'));
-    $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'receipt_name', 'receipt'));
+    $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'distance', 'charged','paid'));
     $Order_Tb->build_test('Verify', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('File_Complaint', array('email', 'password', 'order_id', 'comments'));
     $Order_Tb->build_test('Resolve_Complaint', array('email', 'password', 'order_id'));

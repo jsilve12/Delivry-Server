@@ -31,12 +31,14 @@
 
   //Adds the entry into the new table
   try {
-    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, receipt, price, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:re,:pr,:ad,:ad_de,:lo,:la,:st)");
+    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, receipt, price, distance, paid, charged, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:pr,:di,:pa,:ch,:ad,:ad_de,:lo,:la,:st)");
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
-      ":re" => $_FILES['image']['name'],
       ":pr" => strtolower(trim($_POST['price'])),
+      ":di" => strtolower(trim($_POST['distance'])),
+      ":pa" => strtolower(trim($_POST['paid'])),
+      ":ch" => strtolower(trim($_POST['charged'])),
       ":ad" => $result[0]["address"],
       ":ad_de" => $result[0]["addr_description"],
       ":lo" => $result[0]["longitude"],
