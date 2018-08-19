@@ -4,15 +4,19 @@
 	start($pdo);
 
 	//Makes sure the user has an associated card
-	try{
-		$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']);
-		$stmt->execute();
-		if(empty($stmt))
-		{
-			$response['error'] = "Person doesn't have payment information";
-			done($response);
-		}
-	}
+	// try{
+	// 	$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']."IS NOT NULL");
+	// 	$stmt->execute();
+	// 	if(empty($stmt) || $s)
+	// 	{
+	// 		$response['error'] = "Person doesn't have payment information";
+	// 		done($response);
+	// 	}
+	// }
+	// catch{
+	// 	$response['error'] = "SQL error 1";
+	// 	done($response);
+	// }
 
 	//Verifies the required input is available
 	if(!(isset($_POST['items']) && isset($_POST['address']) && isset($_POST['addr_desc']) && isset($_POST['long']) && isset($_POST['lat']) && isset($_POST['store'])))
@@ -121,7 +125,6 @@
 						":id" => $item_id
 					));
 				}
-
 				//Deals with the table that tracks how many times an item is purchased at a store
 				//Adds a Row
 				$stmt = $pdo->prepare("INSERT INTO stores_item(store_id, item_id, price) VALUES(:si , :ii, :cp)");
