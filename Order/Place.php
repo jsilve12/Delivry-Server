@@ -5,15 +5,15 @@
 
 	//Makes sure the user has an associated card
 	try{
-		$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']."IS NOT NULL");
+		$stmt = $pdo->prepare("SELECT payment FROM People WHERE people_id=".$user[0]['people_id']." IS NOT NULL");
 		$stmt->execute();
-		if(empty($stmt) || $s)
+		if(empty($stmt))
 		{
 			$response['error'] = "Person doesn't have payment information";
 			done($response);
 		}
 	}
-	catch{
+	catch(\Exception $e){
 		$response['error'] = "SQL error 1";
 		done($response);
 	}
