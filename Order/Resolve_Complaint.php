@@ -21,7 +21,7 @@
 
   //Adds the entry into the new table
   try {
-    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, price, , distance, charged, paid, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:pr,:di,:ch,:pa,:ad,:ad_de,:lo,:la,:st)");
+    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, price, distance, charged, paid, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:pr,:di,:ch,:pa,:ad,:ad_de,:lo,:la,:st)");
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
