@@ -8,25 +8,20 @@
     "exp_year" => 2019,
     "cvc" => "314"
   )));
-
-	//Pings the payment servers
-	$charge = \Stripe\Charge::create(array(
-		"amount" => ceil(100000),
-		"currency" => "usd",
-		"customer" => "cus_DS5ya1uJ1Qt8o9",
-		"transfer_group" => "10"
-	));
-
-	$transfer = \Stripe\Transfer::create(array(
-		"amount" => floor(2104),
-		"currency" => "usd",
-		"destination" => "acct_1D1BesBhVnweyBvR",
-		"transfer_group" => "10"
-	));
+	echo($charge['id']);
 
 	$pdo = new PDO('mysql:host=localhost;port=3306;dbname=Delivry','Delivry', 'GPQKGLjb0tvNWv1A');
 	$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-	$_POST = json_decode(trim(strtolower(file_get_contents("php://input"))), true);
+	$_POST = json_decode(trim((file_get_contents("php://input"))), true);
+
+	//Payment must retain it's upper case characters
+	foreach($_POST as $key => $value)
+	{
+		if($key != "payment")
+		{
+			$_POST[$key] = strtolower($value);
+		}
+	}
 	class locat
 	{
 		var $name;
