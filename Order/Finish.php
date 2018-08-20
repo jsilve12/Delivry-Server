@@ -88,29 +88,29 @@
     //Processes the transaction
 
     //Collects the Money
-    $paying = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["placed_by"]);
+    $paying = $pdo->prepare("SELECT payment, charge FROM People WHERE people_id =".$result[0]["placed_by"]);
     $paying->execute();
     $result1 = $paying->FetchAll(PDO::FETCH_ASSOC);
 
     //Pings the payment servers
-    $charge = \Stripe\Charge::create(array(
-      "amount" => 1.1*$driver_pay,
-      "currency" => "usd",
-      "source" => $result1[0]['payment'],
-      "transfer_group" => $id,
-    ));
+  	$charge = \Stripe\Charge::create(array(
+  		"amount" => ceil(110*$driver_pay),
+  		"currency" => "usd",
+  		"customer" => $result1[0]['charge'],
+  		"transfer_group" => $id
+  	));
 
     //Pays out the money
-    $paid = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["accepted_by"]);
+    $paid = $pdo->prepare("SELECT payment, charge FROM People WHERE people_id =".$result[0]["accepted_by"]);
     $paid->execute();
     $result1 = $paid->FetchAll(PDO::FETCH_ASSOC);
 
     $transfer = \Stripe\Transfer::create(array(
-      "amount" => $driver_pay,
-      "currency" => "usd",
-      "destination" => $result1[0]['payment'],
-      "transfer_group" => $id,
-    ));
+  		"amount" => floor(100*$driver_pay),
+  		"currency" => "usd",
+  		"destination" => $result1[0]['payment'],
+  		"transfer_group" => $id
+  	));
 
   $response['success'] = "success";
   $response['charge'] = $charge;

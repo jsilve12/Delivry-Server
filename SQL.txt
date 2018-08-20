@@ -9,6 +9,7 @@ CREATE TABLE People(
 	latitude DOUBLE,
 	rating DOUBLE,
 	payment VARCHAR(255),
+	charge VARCHAR(255)
     PRIMARY KEY(people_id),
 	UNIQUE(name, email, password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

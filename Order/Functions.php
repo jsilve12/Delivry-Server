@@ -3,12 +3,27 @@
 	\Stripe\Stripe::setApiKey('sk_test_2CM2jTpTPsbdran63JwKoPkN');
 	$charge = \Stripe\Token::create(array(
   "card" => array(
-    "number" => "4242424242424242",
+    "number" => "4000 0000 0000 0077",
     "exp_month" => 8,
     "exp_year" => 2019,
     "cvc" => "314"
   )));
-	echo $charge;
+
+	//Pings the payment servers
+	$charge = \Stripe\Charge::create(array(
+		"amount" => ceil(100000),
+		"currency" => "usd",
+		"customer" => "cus_DS5ya1uJ1Qt8o9",
+		"transfer_group" => "10"
+	));
+
+	$transfer = \Stripe\Transfer::create(array(
+		"amount" => floor(2104),
+		"currency" => "usd",
+		"destination" => "acct_1D1BesBhVnweyBvR",
+		"transfer_group" => "10"
+	));
+
 	$pdo = new PDO('mysql:host=localhost;port=3306;dbname=Delivry','Delivry', 'GPQKGLjb0tvNWv1A');
 	$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 	$_POST = json_decode(trim(strtolower(file_get_contents("php://input"))), true);
