@@ -23,22 +23,21 @@
   $driver_pay = 0;
   if((double)$_POST['price'] < 10)
   {
-    $driver_pay = ((double) $_POST['price'])*1.25 + distance*0.8;
+    $driver_pay = ((double) $_POST['price'])*1.25 + ((double) $_POST['distance'])*0.8;
   }
   else {
-    $driver_pay = (((double) $_POST['price'])-10)*1.20+2.5+distance*0.8;
+    $driver_pay = (((double) $_POST['price'])-10)*1.20+2.5+((double) $_POST['distance'])*0.8;
   }
-
   //Adds the entry into the new table
   try {
-    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, receipt, price, distance, paid, charged, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:pr,:di,:pa,:ch,:ad,:ad_de,:lo,:la,:st)");
+    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, price, distance, paid, charged, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:pr,:di,:pa,:ch,:ad,:ad_de,:lo,:la,:st)");
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
       ":pr" => strtolower(trim($_POST['price'])),
       ":di" => strtolower(trim($_POST['distance'])),
-      ":pa" => strtolower(trim($_POST['paid'])),
-      ":ch" => strtolower(trim($_POST['charged'])),
+      ":pa" => 1.1*$driver_pay,
+      ":ch" => $driver_pay,
       ":ad" => $result[0]["address"],
       ":ad_de" => $result[0]["addr_description"],
       ":lo" => $result[0]["longitude"],
@@ -50,12 +49,11 @@
     $response['error'] = "SQL error ";
     done($response);
   }
-
   //Finds the items in the database
   try{
     $stmt = $pdo->prepare("SELECT * FROM Items_Accepted WHERE order_id = ".$_POST['order_id']);
     $stmt->execute();
-    $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
+    $result1 = $stmt->FetchAll(PDO::FETCH_ASSOC);
     if(empty($result))
     {
       $response['error'] = "SQL error";
@@ -67,7 +65,7 @@
     $response['error'] = "SQL error";
     done($response);
   }
-    foreach($result as $value)
+    foreach($result1 as $value)
     {
       try {
         //Enters each item back into the database
@@ -89,27 +87,31 @@
 
     //Processes the transaction
 
-    //Gets the users
+    //Collects the Money
     $paying = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["placed_by"]);
     $paying->execute();
-
-    $paid = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["accepted_by"]);
-    $paid->execute();
+    $result1 = $paying->FetchAll(PDO::FETCH_ASSOC);
 
     //Pings the payment servers
     $charge = \Stripe\Charge::create(array(
       "amount" => 1.1*$driver_pay,
       "currency" => "usd",
-      "source" => $paying[0]['payment'],
+      "source" => $result1[0]['payment'],
       "transfer_group" => $id,
     ));
+
+    //Pays out the money
+    $paid = $pdo->prepare("SELECT payment FROM People WHERE people_id =".$result[0]["accepted_by"]);
+    $paid->execute();
+    $result1 = $paid->FetchAll(PDO::FETCH_ASSOC);
 
     $transfer = \Stripe\Transfer::create(array(
       "amount" => $driver_pay,
       "currency" => "usd",
-      "destination" => $paid[0]['payment'],
+      "destination" => $result1[0]['payment'],
       "transfer_group" => $id,
     ));
+
   $response['success'] = "success";
   $response['charge'] = $charge;
   $response['payment'] = $transfer;

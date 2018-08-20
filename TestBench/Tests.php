@@ -24,7 +24,7 @@
     $Order_Tb->build_test('Amend', array('email', 'password', 'order_id', 'items', 'address', 'addr_description', 'long', 'lat', 'store' ));
     $Order_Tb->build_test('Cancel_Accept', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('Cancel_Order', array('email', 'password', 'order_id'));
-    $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'distance', 'charged','paid'));
+    $Order_Tb->build_test('Finish', array('email', 'password', 'order_id', 'price', 'distance'));
     $Order_Tb->build_test('Verify', array('email', 'password', 'order_id'));
     $Order_Tb->build_test('File_Complaint', array('email', 'password', 'order_id', 'comments'));
     $Order_Tb->build_test('Resolve_Complaint', array('email', 'password', 'order_id'));
