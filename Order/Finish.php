@@ -26,7 +26,7 @@
     $driver_pay = ((double) $_POST['price'])*1.25 + ((double) $_POST['distance'])*0.8;
   }
   else {
-    $driver_pay = (((double) $_POST['price'])-10)*1.20+2.5+((double) $_POST['distance'])*0.8;
+    $driver_pay = (((double) $_POST['price']))*1.20+0.5+((double) $_POST['distance'])*0.8;
   }
   //Adds the entry into the new table
   try {
