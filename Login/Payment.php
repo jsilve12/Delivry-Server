@@ -10,21 +10,22 @@
   	"source" => $_POST['payment'] // obtained with Stripe.js
 	));
 
-	$pay = \Stripe\Account::create(array(
-  	"type" => "custom",
-  	"country" => "US",
-  	"email" => $_POST['email'],
-		"payout_schedule" => array(
-    	"delay_days" => 8,
-    	"interval" => "daily"
-  	)));
+	// $pay = \Stripe\Account::create(array(
+  // 	"type" => "express",
+  // 	"country" => "US",
+  // 	"email" => $_POST['email'],
+	// 	"payout_schedule" => array(
+  //   	"delay_days" => 8,
+  //   	"interval" => "daily"
+  // 	)));
+	// echo($pay);
 
 		//Adds the address to the users SQL entry
 		try
 		{
 		$stmt = $pdo->prepare("UPDATE People SET charge = :ch, payment = :pay WHERE email = :em");
 		$stmt->execute(array(
-			":pay" => $pay['id'],
+			":pay" => $_POST['account'],
 			":ch" => $customer['id'],
 			":em" => $_POST['email']
 		));
