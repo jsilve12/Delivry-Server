@@ -1,7 +1,29 @@
 <?php
+	require_once __DIR__ . "/../vendor/autoload.php";
+	\Stripe\Stripe::setApiKey('sk_test_2CM2jTpTPsbdran63JwKoPkN');
+
+	//Used during testing to generate tokens - Don't uncomment unless testing
+	// $charge = \Stripe\Token::create(array(
+  // "card" => array(
+  //   "number" => "4000 0000 0000 0077",
+  //   "exp_month" => 8,
+  //   "exp_year" => 2019,
+  //   "cvc" => "314"
+  // )));
+	// echo($charge['id']);
+
 	$pdo = new PDO('mysql:host=localhost;port=3306;dbname=Delivry','Delivry', 'GPQKGLjb0tvNWv1A');
 	$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-	$_POST = json_decode(trim(strtolower(file_get_contents("php://input"))), true);
+	$_POST = json_decode(trim((file_get_contents("php://input"))), true);
+
+	//Payment must retain it's upper case characters
+	foreach($_POST as $key => $value)
+	{
+		if($key != "payment")
+		{
+			$_POST[$key] = strtolower($value);
+		}
+	}
 	class locat
 	{
 		var $name;

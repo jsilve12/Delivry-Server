@@ -19,14 +19,25 @@
   }
   $id;
 
+  //Computes the price that the driver gets paid
+  $driver_pay = 0;
+  if((double)$_POST['price'] < 10)
+  {
+    $driver_pay = ((double) $_POST['price'])*1.25 + ((double) $_POST['distance'])*0.8;
+  }
+  else {
+    $driver_pay = (((double) $_POST['price']))*1.20+0.5+((double) $_POST['distance'])*0.8;
+  }
   //Adds the entry into the new table
   try {
-    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, receipt, price, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:re,:pr,:ad,:ad_de,:lo,:la,:st)");
+    $stmt = $pdo->prepare("INSERT INTO Order_Finished(placed_by, accepted_by, price, distance, paid, charged, address, addr_description, longitude, latitude, store) VALUES(:pb,:ab,:pr,:di,:pa,:ch,:ad,:ad_de,:lo,:la,:st)");
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
-      ":re" => $_FILES['image']['name'],
       ":pr" => strtolower(trim($_POST['price'])),
+      ":di" => strtolower(trim($_POST['distance'])),
+      ":pa" => 1.1*$driver_pay,
+      ":ch" => $driver_pay,
       ":ad" => $result[0]["address"],
       ":ad_de" => $result[0]["addr_description"],
       ":lo" => $result[0]["longitude"],
@@ -38,12 +49,11 @@
     $response['error'] = "SQL error ";
     done($response);
   }
-
   //Finds the items in the database
   try{
     $stmt = $pdo->prepare("SELECT * FROM Items_Accepted WHERE order_id = ".$_POST['order_id']);
     $stmt->execute();
-    $result = $stmt->FetchAll(PDO::FETCH_ASSOC);
+    $result1 = $stmt->FetchAll(PDO::FETCH_ASSOC);
     if(empty($result))
     {
       $response['error'] = "SQL error";
@@ -55,7 +65,7 @@
     $response['error'] = "SQL error";
     done($response);
   }
-    foreach($result as $value)
+    foreach($result1 as $value)
     {
       try {
         //Enters each item back into the database
@@ -75,36 +85,35 @@
     $stmt = $pdo->prepare("DELETE FROM Order_Accepted WHERE order_id= ".$_POST['order_id']);
     $stmt->execute();
 
-    //Handles inputing the image
-    if(!isset($_FILES['image']))
-    {
-      $response['error'] = "Image Missing";
-      done($response);
-    }
-    $target = "../Receipts/".basename($_FILES['image']['name']);
+    //Processes the transaction
 
-    //Checks that the extension is appropriate
-    $ext = strtolower(pathinfo($target, PATHINFO_EXTENSION));
-    if($ext != "jpg" && $ext != "png" && $ext != "jpeg" && $ext != "gif")
-    {
-      $response['error'] = "Invalid file extension";
-      done($response);
-    }
+    //Collects the Money
+    $paying = $pdo->prepare("SELECT payment, charge FROM People WHERE people_id =".$result[0]["placed_by"]);
+    $paying->execute();
+    $result1 = $paying->FetchAll(PDO::FETCH_ASSOC);
 
-    //Makes sure the name is distinct
-    if(file_exists($target))
-    {
-      $response['error'] = "File name in use";
-      done($response);
-    }
+    //Pings the payment servers
+  	$charge = \Stripe\Charge::create(array(
+  		"amount" => ceil(110*$driver_pay),
+  		"currency" => "usd",
+  		"customer" => $result1[0]['charge'],
+  		"transfer_group" => $id
+  	));
 
-    //Moves the file to the Appropriate folder
-    try {
-      move_uploaded_file($_FILES['image']['tmp_name'], $target);
-    } catch (\Exception $e) {
-      $response['error'] = "Error Uploading the file"
-    }
+    //Pays out the money
+    $paid = $pdo->prepare("SELECT payment, charge FROM People WHERE people_id =".$result[0]["accepted_by"]);
+    $paid->execute();
+    $result1 = $paid->FetchAll(PDO::FETCH_ASSOC);
+
+    $transfer = \Stripe\Transfer::create(array(
+  		"amount" => floor(100*$driver_pay),
+  		"currency" => "usd",
+  		"destination" => $result1[0]['payment'],
+  		"transfer_group" => $id
+  	));
 
   $response['success'] = "success";
+  $response['charge'] = $charge;
+  $response['payment'] = $transfer;
   done($response);
 ?>

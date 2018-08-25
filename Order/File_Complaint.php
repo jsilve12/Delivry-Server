@@ -21,12 +21,14 @@
 
   //Adds the entry into the new table
   try {
-    $stmt = $pdo->prepare("INSERT INTO Order_Conflict(placed_by, accepted_by, receipt, price, address, addr_description, longitude, latitude, store, comments) VALUES(:pb,:ab,:re,:pr,:ad,:ad_de,:lo,:la,:st, :co)");
+    $stmt = $pdo->prepare("INSERT INTO Order_Conflict(placed_by, accepted_by, price, distance, charged, paid, address, addr_description, longitude, latitude, store, comments) VALUES(:pb,:ab,:pr,:di,:ch,:pa,:ad,:ad_de,:lo,:la,:st, :co)");
     $stmt->execute(array(
       ":pb" => $result[0]["placed_by"],
       ":ab" => $result[0]["accepted_by"],
-      ":re" => $result[0]['receipt'],
       ":pr" => $result[0]['price'],
+      ":di" => $result[0]['distance'],
+      ":ch" => $result[0]['charged'],
+      ":pa" => $result[0]['paid'],
       ":ad" => $result[0]["address"],
       ":ad_de" => $result[0]["addr_description"],
       ":lo" => $result[0]["longitude"],
