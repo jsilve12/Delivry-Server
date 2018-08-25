@@ -23,9 +23,8 @@
 		//Adds the address to the users SQL entry
 		try
 		{
-		$stmt = $pdo->prepare("UPDATE People SET charge = :ch, payment = :pay WHERE email = :em");
+		$stmt = $pdo->prepare("UPDATE People SET charge = :ch WHERE email = :em");
 		$stmt->execute(array(
-			":pay" => $_POST['account'],
 			":ch" => $customer['id'],
 			":em" => $_POST['email']
 		));
