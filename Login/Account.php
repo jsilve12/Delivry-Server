@@ -5,8 +5,8 @@
   {
   $stmt = $pdo->prepare("UPDATE People SET payment = :ch WHERE email = :em");
   $stmt->execute(array(
-    ":ch" => $_GET['id'],
-    ":em" => $_GET['code']
+    ":ch" => $_GET['code'],
+    ":em" => $_GET['state']
   ));
   $response['success'] = "Success";
   done($response);
