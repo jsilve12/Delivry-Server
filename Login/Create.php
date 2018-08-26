@@ -14,15 +14,22 @@
 		done($response);
 	}
 
+	//Creates the account with stripe
+	$customer = \Stripe\Customer::create(array(
+		"email" => $_POST['email'],
+  	"description" => "Customer for ".$_POST['email']
+	));
+
 	//Inserts into the database
 	try
 	{
-		$stmt = $pdo->prepare("INSERT INTO People(name, email, salt, password) VALUES(:na, :em, :sa, :pa) ");
+		$stmt = $pdo->prepare("INSERT INTO People(name, email, salt, password, charge) VALUES(:na, :em, :sa, :pa, :ch) ");
 		$stmt->execute(array(
 			":na" => $_POST['name'],
 			":em" => $_POST['email'],
 			":sa" => $_POST['salt'],
-			":pa" => hash("md5",$_POST['salt'].$_POST['password'])
+			":pa" => hash("md5",$_POST['salt'].$_POST['password']),
+			":ch" => $customer['id']
 		));
 		$response['success'] = "Account created";
 		done($response);

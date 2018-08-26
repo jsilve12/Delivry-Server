@@ -4,36 +4,29 @@
 	//Makes sure the user actually exists
 	start($pdo);
 
-	$customer = \Stripe\Customer::create(array(
-		"email" => $_POST['email'],
-  	"description" => "Customer for ".$_POST['email'],
-  	"source" => $_POST['payment'] // obtained with Stripe.js
-	));
-
-	// $pay = \Stripe\Account::create(array(
-  // 	"type" => "express",
-  // 	"country" => "US",
-  // 	"email" => $_POST['email'],
-	// 	"payout_schedule" => array(
-  //   	"delay_days" => 8,
-  //   	"interval" => "daily"
-  // 	)));
-	// echo($pay);
-
-		//Adds the address to the users SQL entry
-		try
-		{
-		$stmt = $pdo->prepare("UPDATE People SET charge = :ch WHERE email = :em");
+	//Adds the address to the users SQL entry
+	try
+	{
+		$stmt = $pdo->prepare("SELECT Charge FROM People WHERE email = :em");
 		$stmt->execute(array(
-			":ch" => $customer['id'],
 			":em" => $_POST['email']
 		));
-		$response['success'] = "Success";
-		done($response);
 	}
 	catch(\Exception $e)
 	{
 		$response['error'] = "SQL entered improperly";
+		done($response);
+	}
+
+	try {
+    $key = \Stripe\EphemeralKey::create(
+      array("customer" => $stmt['charge']),
+      array("stripe_version" => $_POST['api_version'])
+    );
+    header('Content-Type: application/json');
+    exit(json_encode($key));
+	} catch (Exception $e) {
+		$response['error'] = "Error Getting key from Stripe";
 		done($response);
 	}
 ?>
