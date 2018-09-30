@@ -22,6 +22,13 @@
 				":sn" => $_POST['store']
 			));
 			$response['orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
+			$storage;
+			$count = 0;
+			foreach ($response['orders'] as $key) {
+				$storage[$count] = $key;
+				$count += 1;
+			}
+			$response['orders'] = $storage;
 			done($response);
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";
@@ -40,6 +47,13 @@
 				":lath" => $_POST['lat'] + $arr[1]
 			));
 			$response['orders'] = $stmt->FetchAll(PDO::FETCH_ASSOC);
+			$storage = array();
+			$count = 0;
+			foreach ($response['orders'] as $key) {
+				$storage[$count] = $key;
+				$count += 1;
+			}
+			$response['orders'] = $storage;
 			done($response);
 		} catch (\Exception $e) {
 			$response['error'] = "SQL error";

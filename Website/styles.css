@@ -99,11 +99,23 @@
   img{
     display: none;
   }
-  @media only screen and (min-width:800px) {
+    .LogIn{
+      background-color: inherit;
+    }
+    .Log{
+      text-align: center;
+      display: block;
+    }
+    .Log form{
+      display: inline-block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  @media only screen and (min-width:900px) {
     .intext h1{
       font-size: 2em;
     }
-    a{
+    a, .dropdown{
       margin-left: 5.0%;
       margin-right: 5.5%;
     }
@@ -137,16 +149,17 @@
       width: 100%;
     }
     .person p{
-      float:right;
-      margin-right: 3%;
-      width:53%;
-      margin-left:4%;
+      float:left;
+      margin-right: 1%;
+      width:73%;
+      margin-left:2%;
     }
     .person img{
       float:left;
-      width:33%;
+      width:8%;
       margin-right: 4%;
-      margin-left:3%;
+      margin-left:5%;
+      background-color: inherit;
     }
   }
 </style>
